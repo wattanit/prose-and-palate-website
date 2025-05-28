@@ -115,7 +115,7 @@ const postsForClient = sortedPosts.map(post => ({
       </div>
 
       <!-- Posts Grid -->
-      <div id="posts-container">
+      <div id="posts-container" data-all-posts>
         <Posts className="mb-16" posts={currentPosts} />
       </div>
 
@@ -129,171 +129,105 @@ const postsForClient = sortedPosts.map(post => ({
   </section>
 </Base>
 
-<script define:vars={{ posts: postsForClient, config }}>
-  // Client-side filtering functionality
-  document.addEventListener('DOMContentLoaded', function() {
+<script>
+  // Use event delegation to ensure handlers always work
+  document.addEventListener('click', function(e) {
+    if (e.target.closest('.category-btn')) {
+      e.preventDefault();
+      const button = e.target.closest('.category-btn');
+      const selectedCategory = button.getAttribute('data-category');
+      
+      handleCategoryFilter(selectedCategory);
+    }
+  });
+
+  // Initialize on multiple events to ensure it works when coming back from other pages
+  document.addEventListener('DOMContentLoaded', initializeFromURL);
+  document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) {
+      setTimeout(initializeFromURL, 50);
+    }
+  });
+  window.addEventListener('pageshow', function() {
+    setTimeout(initializeFromURL, 50);
+  });
+  window.addEventListener('focus', function() {
+    setTimeout(initializeFromURL, 50);
+  });
+
+  // Handle browser back/forward
+  window.addEventListener('popstate', function() {
+    setTimeout(initializeFromURL, 50);
+  });
+
+  function handleCategoryFilter(selectedCategory) {
+    updateActiveButton(selectedCategory);
+    filterPosts(selectedCategory);
+    
+    // Update URL
+    const newUrl = selectedCategory === 'all' ? '/' : `/?category=${selectedCategory}`;
+    if (window.location.href !== window.location.origin + newUrl) {
+      window.history.pushState({ category: selectedCategory }, '', newUrl);
+    }
+  }
+
+  function initializeFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const category = urlParams.get('category') || 'all';
+    updateActiveButton(category);
+    filterPosts(category);
+  }
+
+  function updateActiveButton(selectedCategory) {
     const categoryButtons = document.querySelectorAll('.category-btn');
+    categoryButtons.forEach(btn => {
+      const btnCategory = btn.getAttribute('data-category');
+      if (btnCategory === selectedCategory) {
+        btn.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
+        btn.classList.add('bg-primary', 'text-white', 'border-primary', 'shadow-md');
+      } else {
+        btn.classList.remove('bg-primary', 'text-white', 'border-primary', 'shadow-md');
+        btn.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
+      }
+    });
+  }
+
+  function filterPosts(selectedCategory) {
     const postsContainer = document.getElementById('posts-container');
     const emptyState = document.getElementById('empty-state');
     
-    // Function to format date
-    function formatDate(dateString) {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('en-US', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric'
-      });
-    }
+    if (!postsContainer) return;
+
+    // Get all post elements and extract their categories
+    const allPostElements = postsContainer.querySelectorAll('.row > div');
+    let visibleCount = 0;
     
-    // Function to humanize text
-    function humanize(str) {
-      return str.replace(/^[\s_]+|[\s_]+$/g, '')
-                .replace(/[_\s]+/g, ' ')
-                .replace(/^[a-z]/, function(m) { return m.toUpperCase(); });
-    }
-    
-    // Function to render posts
-    function renderPosts(filteredPosts) {
-      if (filteredPosts.length === 0) {
+    allPostElements.forEach(postEl => {
+      const categoryLinks = postEl.querySelectorAll('a[href^="/categories/"]');
+      const categories = Array.from(categoryLinks).map(link => {
+        const href = link.getAttribute('href');
+        return href ? href.replace('/categories/', '').toLowerCase() : '';
+      }).filter(cat => cat);
+      
+      if (selectedCategory === 'all' || categories.includes(selectedCategory.toLowerCase())) {
+        postEl.style.display = '';
+        visibleCount++;
+      } else {
+        postEl.style.display = 'none';
+      }
+    });
+
+    // Show/hide empty state
+    if (emptyState) {
+      if (visibleCount === 0) {
         postsContainer.style.display = 'none';
         emptyState.classList.remove('hidden');
-        return;
-      }
-      
-      postsContainer.style.display = 'block';
-      emptyState.classList.add('hidden');
-      
-      const postsHtml = `
-        <div class="row gy-5 gx-4 mb-16 ${filteredPosts.length === 1 ? 'justify-center' : ''}">
-          ${filteredPosts.map((post, i) => `
-            <div class="${i === 0 ? 'col-12' : 'col-12 sm:col-6'}">
-              ${post.data.image ? `
-                <a href="/${post.id}" class="rounded-lg block hover:text-primary overflow-hidden group">
-                  <img 
-                    class="group-hover:scale-[1.03] transition duration-300 w-full" 
-                    src="${post.data.image}" 
-                    alt="${post.data.title}"
-                    width="${i === 0 ? 925 : 445}"
-                    height="${i === 0 ? 475 : 230}"
-                  />
-                </a>
-              ` : ''}
-              <ul class="mt-6 mb-4 flex flex-wrap items-center text-text">
-                <li class="mr-5 flex items-center flex-wrap font-medium">
-                  <svg class="mr-1 h-5 w-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19 4h-3V2h-2v2h-4V2H8v2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zM5 20V7h14V6l.002 14H5z"></path>
-                    <path d="m15.628 12.183-1.8-1.799 1.37-1.371 1.8 1.799zm-7.623 4.018V18h1.799l4.976-4.97-1.799-1.799z"></path>
-                  </svg>
-                  ${formatDate(post.data.date)}
-                </li>
-                <li class="mr-5 flex items-center flex-wrap">
-                  <svg class="mr-1 h-[18px] w-[18px] text-gray-600" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M10 3H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zM9 9H5V5h4v4zm11 4h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1zm-1 6h-4v-4h4v4zM17 3c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm0 6c-1.103 0-2-.897-2-2s.897-2 2-2 2 .897 2 2-.897 2-2 2zM7 13c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm0 6c-1.103 0-2-.897-2-2s.897-2 2-2 2 .897 2 2-.897 2-2 2z"></path>
-                  </svg>
-                  <ul>
-                    ${post.data.categories.map((category, catIndex) => `
-                      <li class="inline-block">
-                        <a href="/categories/${category.toLowerCase()}" class="mr-2 hover:text-primary font-medium">
-                          ${humanize(category)}${catIndex !== post.data.categories.length - 1 ? ',' : ''}
-                        </a>
-                      </li>
-                    `).join('')}
-                  </ul>
-                </li>
-              </ul>
-              <h3 class="mb-4">
-                <a href="/${post.id}" class="block hover:text-primary transition duration-300">
-                  ${post.data.title}
-                </a>
-              </h3>
-              <p class="text-text">
-                ${post.data.description || ''}...
-              </p>
-            </div>
-          `).join('')}
-        </div>
-      `;
-      
-      postsContainer.innerHTML = postsHtml;
-    }
-    
-    // Function to filter posts by category
-    function filterPosts(selectedCategory) {
-      let filteredPosts;
-      
-      if (selectedCategory === 'all') {
-        filteredPosts = posts;
       } else {
-        filteredPosts = posts.filter(post => 
-          post.data.categories.some(category => 
-            category.toLowerCase() === selectedCategory.toLowerCase()
-          )
-        );
-      }
-      
-      // Limit to pagination size
-      const paginatedPosts = filteredPosts.slice(0, config.settings.pagination);
-      renderPosts(paginatedPosts);
-      
-      return filteredPosts;
-    }
-    
-    // Add click handlers to category buttons
-    categoryButtons.forEach(button => {
-      button.addEventListener('click', function() {
-        const selectedCategory = this.getAttribute('data-category');
-        
-        // Update active button
-        categoryButtons.forEach(btn => {
-          btn.classList.remove('bg-primary', 'text-white', 'border-primary', 'shadow-md');
-          btn.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
-        });
-        
-        this.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
-        this.classList.add('bg-primary', 'text-white', 'border-primary', 'shadow-md');
-        
-        // Filter and render posts
-        filterPosts(selectedCategory);
-        
-        // Update URL without page reload
-        const newUrl = selectedCategory === 'all' ? '/' : `/?category=${selectedCategory}`;
-        window.history.pushState({ category: selectedCategory }, '', newUrl);
-      });
-    });
-    
-    // Handle browser back/forward buttons
-    window.addEventListener('popstate', function(event) {
-      const urlParams = new URLSearchParams(window.location.search);
-      const category = urlParams.get('category') || 'all';
-      
-      // Update active button
-      categoryButtons.forEach(btn => {
-        const btnCategory = btn.getAttribute('data-category');
-        if (btnCategory === category) {
-          btn.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
-          btn.classList.add('bg-primary', 'text-white', 'border-primary', 'shadow-md');
-        } else {
-          btn.classList.remove('bg-primary', 'text-white', 'border-primary', 'shadow-md');
-          btn.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
-        }
-      });
-      
-      // Filter posts
-      filterPosts(category);
-    });
-    
-    // Initialize based on URL parameter
-    const urlParams = new URLSearchParams(window.location.search);
-    const initialCategory = urlParams.get('category');
-    if (initialCategory) {
-      // Find and click the appropriate button
-      const targetButton = document.querySelector(`[data-category="${initialCategory}"]`);
-      if (targetButton) {
-        targetButton.click();
+        postsContainer.style.display = 'block';
+        emptyState.classList.add('hidden');
       }
     }
-  });
+  }
 </script>
 
 <style>
