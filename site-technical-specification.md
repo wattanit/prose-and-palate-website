@@ -1,6 +1,6 @@
 # Website Technical Specifications
 
-version 0.2
+version 0.3
 
 ## **Core Framework & Stack**
 - **Framework:** Astro.js (Static Site Generator)
@@ -65,102 +65,116 @@ version 0.2
 **Current:** Single blog feed
 **Required:** Category-filtered homepage views
 
-- **Default Homepage:** Mixed feed showing latest from all categories (bars, spirits, books)
-- **Category Filter Tabs/Buttons:** Allow visitors to filter by category
+- **Default Homepage:** Mixed feed showing latest from all categories
+- **Category Filter System:** Dynamic category filter tabs/buttons based on existing categories
 - **URL Structure:**
   - `/` - All categories mixed
-  - `/bars` - Bars only
-  - `/spirits` - Spirits only  
-  - `/books` - Books only
+  - `/category/[category-name]` - Filtered by specific category (e.g., `/category/bars`, `/category/spirits`, `/category/books`)
 - **Visual Indicators:** Category badges/labels on each post preview
+- **Implementation Note:** Categories should be implemented as a standard taxonomy system. While the business currently focuses on bars, spirits, and books, the system should be flexible to accommodate any categories defined in the CMS.
 
 ### **2. Enhanced Taxonomy System**
-**Expand beyond basic tags/categories:**
-- **Primary Categories:** Bars, Spirits, Books
-- **Sub-categories:** 
-  - Bars: Rooftop, Cocktail Bar, Hotel Bar, Local Spot
-  - Spirits: Whiskey, Gin, Rum, Vodka, etc.
-  - Books: Fiction, Non-fiction, Biography, etc.
-- **Rating System:** Star ratings per category (different criteria)
+**Flexible category and subcategory system:**
+- **Primary Categories:** Implemented as standard categories (currently: bars, spirits, books)
+- **Sub-categories (tags):** 
+  - Examples for bars: rooftop, cocktail-bar, hotel-bar, local-spot
+  - Examples for spirits: whiskey, gin, rum, vodka
+  - Examples for books: fiction, non-fiction, biography
+- **Rating System:** Configurable rating criteria per category
+- **Implementation Note:** The system should treat all categories equally. The three main categories (bars, spirits, books) are business priorities but should not require special technical implementation.
 
 ## **Content Structure Specifications**
 
-### **Review Post Schema (MDX/Markdown)**
+### **Universal Review Post Schema (MDX/Markdown)**
 ```yaml
 ---
 # Basic Meta
-title: "Lennon's at Rosewood Bangkok"
-slug: "lennons-rosewood-bangkok"
+title: "Review Title"
+slug: "review-slug"
 date: 2025-05-28
-author: "Your Name"
+author: "Author Name"
 draft: false
 
-# Category System
-category: "bars" # bars | spirits | books
-subcategory: "rooftop-bar"
-tags: ["bangkok", "hotel-bar", "premium", "cocktails"]
+# Category System (Standard Implementation)
+category: "category-name" # Any category (e.g., bars, spirits, books, etc.)
+subcategory: "subcategory-name" # Optional subcategory/tag
+tags: ["tag1", "tag2", "tag3"]
 
-# Ratings (Different per category)
+# Flexible Ratings System
+ratings:
+  criterion1: 4  # Rating criteria should be configurable per category
+  criterion2: 4
+  criterion3: 4
+  overall: 4
+
+# SEO & Social
+description: "Review description"
+featured_image: "/images/review-main.jpg"
+og_image: "/images/review-og.jpg"
+
+# Optional Category-Specific Fields
+price_point: "Price" # Optional, can be used for any category
+location: "Location" # Optional
+additional_info: "Any additional structured data"
+---
+```
+
+**Category-Specific Examples:**
+
+**Bar Review Example:**
+```yaml
+category: "bars"
+tags: ["bangkok", "hotel-bar", "premium", "cocktails"]
 ratings:
   ambience: 4
   taste: 4
   service: 4
   overall: 4
-
-# SEO & Social
-description: "Elevated cocktails with Bangkok skyline views at Lennon's rooftop bar"
-featured_image: "/images/lennons-main.jpg"
-og_image: "/images/lennons-og.jpg"
----
+location: "Bangkok, Thailand"
 ```
 
-### **Spirit Review Schema**
+**Spirit Review Example:**
 ```yaml
----
-title: "Macallan"
 category: "spirits"
-subcategory: "whiskey"
+tags: ["whiskey", "scottish", "premium"]
 ratings:
   complexity: 4
   balance: 4
   value: 3
   overall: 4
 price_point: "฿2,500"
-alcohol_content: "43%"
-origin: "Scotland"
----
+additional_info: "43% ABV, Scotland"
 ```
 
-### **Book Review Schema**
+**Book Review Example:**
 ```yaml
----
-title: "Book Title"
 category: "books"
-subcategory: "fiction"
+tags: ["fiction", "contemporary"]
 ratings:
   writing_quality: 4
   engagement: 5
   originality: 3
   overall: 4
-author: "Author Name"
----
+additional_info: "Author Name"
 ```
 
 ## **TinaCMS Integration Specifications**
 
 ### **Content Management Setup**
-- **Infrastucture:** Using TinaCloud 
+- **Infrastructure:** Using TinaCloud 
 - **Admin Interface:** `/admin` route for content editing
 - **Authentication:** GitHub-based authentication
 - **Real-time Editing:** Visual editing for homepage and static pages
 - **Media Management:** Image upload and management for review photos
 
 ### **TinaCMS Schema Configuration**
-- **Collections:** Separate collections for bars, spirits, books
+- **Collections:** Single "posts" collection with category field (not separate collections per category)
+- **Category Management:** Categories managed as standard taxonomy in CMS
 - **Rich Text Editor:** Support for review content with custom components
-- **Rating Components:** Custom rating input fields per category
+- **Flexible Rating System:** Configurable rating input fields that can vary by category
 - **Media Fields:** Multiple image uploads per review
 - **SEO Fields:** Meta description, og:image, etc.
+- **Implementation Note:** Avoid hardcoding specific categories in the CMS schema. Use a flexible approach that allows any categories to be created and managed through the CMS interface.
 
 ## **Homepage Layout Specifications**
 
@@ -169,11 +183,12 @@ author: "Author Name"
 - **Navigation:** Home, About, Contact, Categories dropdown
 - **Search:** FuseJS-powered search (already in template)
 
-### **Category Filter Section** (New Addition)
-- **Filter Tabs:** All | Bars | Spirits | Books
+### **Dynamic Category Filter Section** (New Addition)
+- **Filter Tabs:** Generated dynamically from existing categories (All | [Category 1] | [Category 2] | etc.)
 - **Active State:** Visual indication of selected category
 - **JavaScript:** Client-side filtering without page reload
 - **URL Updates:** Browser history support for direct category links
+- **Implementation Note:** Category filters should be dynamically generated from the actual categories in use, not hardcoded for specific categories.
 
 ### **Post Grid Layout**
 - **Card Design:** Image, title, category badge, rating stars, excerpt
