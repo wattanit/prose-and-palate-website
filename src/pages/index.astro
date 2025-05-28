@@ -1,22 +1,309 @@
 ---
 import config from "@/config/config.json";
 import Base from "@/layouts/Base.astro";
-import Pagination from "@/layouts/components/Pagination.astro";
 import Posts from "@/layouts/Posts.astro";
 import { getSinglePage } from "@/lib/contentParser.astro";
+import { getTaxonomy } from "@/lib/taxonomyParser.astro";
 import { sortByDate } from "@/lib/utils/sortFunctions";
+import { humanize } from "@/lib/utils/textConverter";
+import dateFormat from "@/lib/utils/dateFormat";
 
+// Get all posts and categories
 const posts = await getSinglePage("posts");
 const sortedPosts = sortByDate(posts);
+const categories = await getTaxonomy("posts", "categories");
+
+// Pagination
 const totalPages = Math.ceil(posts.length / config.settings.pagination);
 const currentPosts = sortedPosts.slice(0, config.settings.pagination);
+
+// Get category statistics
+const getCategoryStats = () => {
+  const stats: { [key: string]: number } = {};
+  posts.forEach(post => {
+    post.data.categories.forEach(category => {
+      const normalizedCategory = category.toLowerCase();
+      stats[normalizedCategory] = (stats[normalizedCategory] || 0) + 1;
+    });
+  });
+  return stats;
+};
+
+const categoryStats = getCategoryStats();
+
+// Prepare posts data for client-side filtering
+const postsForClient = sortedPosts.map(post => ({
+  id: post.id,
+  data: {
+    title: post.data.title,
+    description: post.data.description,
+    date: post.data.date,
+    image: post.data.image,
+    categories: post.data.categories,
+    authors: post.data.authors,
+    tags: post.data.tags
+  }
+}));
 ---
 
 <Base>
   <section class="section">
     <div class="container">
-      <Posts posts={currentPosts} className="mb-16" />
-      <Pagination currentPage={1} totalPages={totalPages} />
+      <!-- Hero Section -->
+      <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          Prose & Palate
+        </h1>
+        <p class="text-xl text-gray-600 mb-6 max-w-3xl mx-auto">
+          Where taste meets literature. Curated reviews of exceptional bars, premium spirits, and captivating books.
+        </p>
+        <div class="flex flex-wrap justify-center gap-6 text-sm text-gray-500">
+          <span class="flex items-center gap-2">
+            <span class="text-purple-500">🍸</span>
+            {categoryStats.bars || 0} Bar Reviews
+          </span>
+          <span class="flex items-center gap-2">
+            <span class="text-amber-500">🥃</span>
+            {categoryStats.spirits || 0} Spirit Reviews
+          </span>
+          <span class="flex items-center gap-2">
+            <span class="text-blue-500">📚</span>
+            {categoryStats.books || 0} Book Reviews
+          </span>
+          <span class="flex items-center gap-2">
+            <span class="text-gray-500">📝</span>
+            {categoryStats.development || 0} Development
+          </span>
+          <span class="flex items-center gap-2">
+            <span class="text-green-500">🎨</span>
+            {categoryStats.art || 0} Art
+          </span>
+        </div>
+      </div>
+
+      <!-- Category Filter -->
+      <div class="category-filter mb-8">
+        <div class="flex flex-wrap gap-2 justify-center md:justify-start">
+          <button
+            class="category-btn active inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-200 bg-primary text-white border-primary shadow-md"
+            data-category="all"
+          >
+            <span class="text-sm">🌟</span>
+            <span class="font-medium">All</span>
+          </button>
+          {categories.map((category) => {
+            const categoryIcon = category === 'bars' ? '🍸' : 
+                                category === 'spirits' ? '🥃' : 
+                                category === 'books' ? '📚' : 
+                                category === 'development' ? '💻' : 
+                                category === 'art' ? '🎨' : 
+                                category === 'lifestyle' ? '🌿' : 
+                                category === 'food' ? '🍽️' : 
+                                category === 'accessories' ? '👜' : '📄';
+            
+            return (
+              <button
+                class="category-btn inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-200 bg-white text-gray-700 border-gray-200 hover:border-primary hover:text-primary hover:shadow-sm"
+                data-category={category}
+              >
+                <span class="text-sm">{categoryIcon}</span>
+                <span class="font-medium">{humanize(category)}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <!-- Posts Grid -->
+      <div id="posts-container">
+        <Posts className="mb-16" posts={currentPosts} />
+      </div>
+
+      <!-- Empty State (hidden by default) -->
+      <div id="empty-state" class="text-center py-12 hidden">
+        <div class="text-gray-400 text-6xl mb-4">🔍</div>
+        <h3 class="text-xl font-semibold text-gray-600 mb-2">No posts found</h3>
+        <p class="text-gray-500">Try selecting a different category or check back later for new content.</p>
+      </div>
     </div>
   </section>
 </Base>
+
+<script define:vars={{ posts: postsForClient, config }}>
+  // Client-side filtering functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const categoryButtons = document.querySelectorAll('.category-btn');
+    const postsContainer = document.getElementById('posts-container');
+    const emptyState = document.getElementById('empty-state');
+    
+    // Function to format date
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+      });
+    }
+    
+    // Function to humanize text
+    function humanize(str) {
+      return str.replace(/^[\s_]+|[\s_]+$/g, '')
+                .replace(/[_\s]+/g, ' ')
+                .replace(/^[a-z]/, function(m) { return m.toUpperCase(); });
+    }
+    
+    // Function to render posts
+    function renderPosts(filteredPosts) {
+      if (filteredPosts.length === 0) {
+        postsContainer.style.display = 'none';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+      
+      postsContainer.style.display = 'block';
+      emptyState.classList.add('hidden');
+      
+      const postsHtml = `
+        <div class="row gy-5 gx-4 mb-16 ${filteredPosts.length === 1 ? 'justify-center' : ''}">
+          ${filteredPosts.map((post, i) => `
+            <div class="${i === 0 ? 'col-12' : 'col-12 sm:col-6'}">
+              ${post.data.image ? `
+                <a href="/${post.id}" class="rounded-lg block hover:text-primary overflow-hidden group">
+                  <img 
+                    class="group-hover:scale-[1.03] transition duration-300 w-full" 
+                    src="${post.data.image}" 
+                    alt="${post.data.title}"
+                    width="${i === 0 ? 925 : 445}"
+                    height="${i === 0 ? 475 : 230}"
+                  />
+                </a>
+              ` : ''}
+              <ul class="mt-6 mb-4 flex flex-wrap items-center text-text">
+                <li class="mr-5 flex items-center flex-wrap font-medium">
+                  <svg class="mr-1 h-5 w-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19 4h-3V2h-2v2h-4V2H8v2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zM5 20V7h14V6l.002 14H5z"></path>
+                    <path d="m15.628 12.183-1.8-1.799 1.37-1.371 1.8 1.799zm-7.623 4.018V18h1.799l4.976-4.97-1.799-1.799z"></path>
+                  </svg>
+                  ${formatDate(post.data.date)}
+                </li>
+                <li class="mr-5 flex items-center flex-wrap">
+                  <svg class="mr-1 h-[18px] w-[18px] text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M10 3H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zM9 9H5V5h4v4zm11 4h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1zm-1 6h-4v-4h4v4zM17 3c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm0 6c-1.103 0-2-.897-2-2s.897-2 2-2 2 .897 2 2-.897 2-2 2zM7 13c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm0 6c-1.103 0-2-.897-2-2s.897-2 2-2 2 .897 2 2-.897 2-2 2z"></path>
+                  </svg>
+                  <ul>
+                    ${post.data.categories.map((category, catIndex) => `
+                      <li class="inline-block">
+                        <a href="/categories/${category.toLowerCase()}" class="mr-2 hover:text-primary font-medium">
+                          ${humanize(category)}${catIndex !== post.data.categories.length - 1 ? ',' : ''}
+                        </a>
+                      </li>
+                    `).join('')}
+                  </ul>
+                </li>
+              </ul>
+              <h3 class="mb-4">
+                <a href="/${post.id}" class="block hover:text-primary transition duration-300">
+                  ${post.data.title}
+                </a>
+              </h3>
+              <p class="text-text">
+                ${post.data.description || ''}...
+              </p>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      
+      postsContainer.innerHTML = postsHtml;
+    }
+    
+    // Function to filter posts by category
+    function filterPosts(selectedCategory) {
+      let filteredPosts;
+      
+      if (selectedCategory === 'all') {
+        filteredPosts = posts;
+      } else {
+        filteredPosts = posts.filter(post => 
+          post.data.categories.some(category => 
+            category.toLowerCase() === selectedCategory.toLowerCase()
+          )
+        );
+      }
+      
+      // Limit to pagination size
+      const paginatedPosts = filteredPosts.slice(0, config.settings.pagination);
+      renderPosts(paginatedPosts);
+      
+      return filteredPosts;
+    }
+    
+    // Add click handlers to category buttons
+    categoryButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const selectedCategory = this.getAttribute('data-category');
+        
+        // Update active button
+        categoryButtons.forEach(btn => {
+          btn.classList.remove('bg-primary', 'text-white', 'border-primary', 'shadow-md');
+          btn.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
+        });
+        
+        this.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
+        this.classList.add('bg-primary', 'text-white', 'border-primary', 'shadow-md');
+        
+        // Filter and render posts
+        filterPosts(selectedCategory);
+        
+        // Update URL without page reload
+        const newUrl = selectedCategory === 'all' ? '/' : `/?category=${selectedCategory}`;
+        window.history.pushState({ category: selectedCategory }, '', newUrl);
+      });
+    });
+    
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', function(event) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const category = urlParams.get('category') || 'all';
+      
+      // Update active button
+      categoryButtons.forEach(btn => {
+        const btnCategory = btn.getAttribute('data-category');
+        if (btnCategory === category) {
+          btn.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
+          btn.classList.add('bg-primary', 'text-white', 'border-primary', 'shadow-md');
+        } else {
+          btn.classList.remove('bg-primary', 'text-white', 'border-primary', 'shadow-md');
+          btn.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
+        }
+      });
+      
+      // Filter posts
+      filterPosts(category);
+    });
+    
+    // Initialize based on URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialCategory = urlParams.get('category');
+    if (initialCategory) {
+      // Find and click the appropriate button
+      const targetButton = document.querySelector(`[data-category="${initialCategory}"]`);
+      if (targetButton) {
+        targetButton.click();
+      }
+    }
+  });
+</script>
+
+<style>
+  .category-filter {
+    margin-bottom: 2rem;
+  }
+  
+  @media (max-width: 768px) {
+    .category-filter {
+      margin-bottom: 1.5rem;
+    }
+  }
+</style>

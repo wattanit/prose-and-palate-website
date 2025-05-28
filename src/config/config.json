@@ -1,35 +1,35 @@
 {
   "site": {
-    "title": "Bookworm Light Astro | Blog Template",
-    "base_url": "https://bookworm-light-astro.vercel.app",
+    "title": "Prose & Palate | Bars & Books",
+    "base_url": "https://prose-and-palate.vercel.app",
     "base_path": "/",
     "trailing_slash": false,
     "favicon": "/images/favicon.png",
     "logo": "/images/logo.png",
     "logo_width": "200",
     "logo_height": "34",
-    "logo_text": "Bookworm Light"
+    "logo_text": "Prose & Palate"
   },
 
   "settings": {
-    "pagination": 5,
-    "summary_length": 100
+    "pagination": 6,
+    "summary_length": 120
   },
 
   "metadata": {
-    "meta_author": "Themefisher",
+    "meta_author": "Prose & Palate",
     "meta_image": "/images/og-image.png",
-    "meta_description": "Bookworm Light Astro Blog Template"
+    "meta_description": "Curated reviews of bars, spirits, and books - where taste meets literature"
   },
 
   "params": {
     "contact_form_action": "#",
-    "copyright": "Copyright © 2025 a theme by [Themefisher](https://themefisher.com)"
+    "copyright": "Copyright © 2025 Prose & Palate. All rights reserved."
   },
 
   "contactinfo": {
-    "address": "355 S Grand Ave <br/> Los Angeles, CA 90071",
-    "email": "info@bookworm.org",
-    "phone": "+800 567 1234"
+    "address": "Bangkok, Thailand",
+    "email": "contact@proseandpalate.com",
+    "phone": "+66 2 123 4567"
   }
 }

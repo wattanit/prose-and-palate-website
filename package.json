@@ -1,12 +1,14 @@
 {
-  "name": "bookworm-light-astro",
-  "version": "3.1.1",
+  "name": "prose-and-palate-website",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "format": "prettier -w ."
+    "format": "prettier -w .",
+    "tina:dev": "tinacms dev -c \"npm run dev\"",
+    "tina:build": "tinacms build && npm run build"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -28,7 +30,9 @@
     "@justinribeiro/lite-youtube": "^1.8.2",
     "remark-collapse": "^0.1.2",
     "remark-toc": "^9.0.0",
-    "vite": "^6.3.5"
+    "vite": "^6.3.5",
+    "tinacms": "^2.4.0",
+    "@tinacms/cli": "^1.6.9"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.10",

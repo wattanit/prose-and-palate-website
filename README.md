@@ -1,102 +1,299 @@
-<h1 align=center>Bookworm Light Astro</h1>
-<p align=center>Bookworm Light is a feature-rich, minimal, highly customizable, easy-to-use free Astro blog theme.</p>
-<h2 align="center"> <a target="_blank" href="https://bookworm-light-astro.vercel.app/" rel="nofollow">👀Demo</a> | <a  target="_blank" href="https://pagespeed.web.dev/report?url=https%3A%2F%2Fbookworm-light-astro.vercel.app%2F&form_factor=desktop">Page Speed (100%)🚀</a>
-</h2>
+# Prose & Palate Website
 
-<p align=center>
-  <a href="https://github.com/withastro/astro/releases/tag/astro%405.5.2" alt="Contributors">
-    <img src="https://img.shields.io/static/v1?label=ASTRO&message=5.5&color=000&logo=astro" />
-  </a>
+A sophisticated review website for bars, spirits, and books built with Astro.js and TinaCMS.
 
-  <a href="https://github.com/themefisher/bookworm-light-astro/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/themefisher/bookworm-light-astro" alt="license"></a>
+## 🌟 Features
 
-  <img src="https://img.shields.io/github/languages/code-size/themefisher/bookworm-light-astro" alt="code size">
+### Multi-Category Review System
+- **Bars**: Rooftop bars, cocktail lounges, hotel bars, local spots, wine bars, beer bars
+- **Spirits**: Whiskey, gin, rum, vodka, tequila, brandy, liqueurs
+- **Books**: Fiction, non-fiction, biography, mystery, romance, sci-fi, fantasy, history, business, self-help
 
-  <a href="https://github.com/themefisher/bookworm-light-astro/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/themefisher/bigspring-light-astro" alt="contributors"></a>
-</p>
+### Category-Specific Rating Systems
+- **Bars**: Ambience, Taste, Service, Overall
+- **Spirits**: Complexity, Balance, Value, Overall  
+- **Books**: Writing Quality, Engagement, Originality, Overall
 
-![bookworm-light](https://demo.gethugothemes.com/thumbnails/bookworm-light.png)
+### Advanced Features
+- ⭐ Visual star rating system
+- 🏷️ Category badges with icons
+- 🔍 Client-side category filtering
+- 📱 Responsive design
+- 🎨 Modern UI with Tailwind CSS
+- 📝 TinaCMS integration for content management
+- 🔗 SEO optimized with meta tags and Open Graph
 
-Bookworm Light is a minimal multi-author free Astro blog theme which is perfect for any kind of blog website. Whether you're interested in food, beauty, travel, photography, lifestyle, fitness, health, or other topics, this theme is a great fit. The theme is super fast and SEO friendly which makes it easier for your content to be discovered by search engines.
+## 🚀 Quick Start
 
-## 🔑Key Features
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
 
-- 🎨 Highly Customizable (Color, Font, Menu, Social Links, SEO Meta Tags, etc.)
-- 👥 Multi-Author Support
-- 📚 Authors Page
-- 👤 Author Single Page
-- 🔍 Search Functionality with FuseJS
-- 🏷️ Tags and Categories Support
-- 📲 Post Social Share Option
-- 🔗 Similar Post Suggestions
-- ⚡ Fast by Default (95+ Google PageSpeed Score)
-- ⚙️ Netlify Settings Pre-configured
-- 📬 Contact Form Support
-- 🌅 Support OG Image
-- ✍️ Write and Update Content in Markdown / MDX
-- 📚 MDX Components Auto Import
-- 📝 Includes Draft Pages and Posts
-- 🚀 Built with Tailwind CSS Framework
-- 📱 Fully Responsive on Desktops, Tablets, and Smartphones
-- 🔍 SEO Friendly
+### Installation
 
-<!-- installation -->
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd prose-and-palate-website
+   ```
 
-## 🔧Installation
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-After downloading the template, you have some prerequisites to install. Then you can run it on your localhost. You can view the package.json file to see which scripts are included.
+3. **Start development server**
+   ```bash
+   npm run dev
+   ```
 
-### ⚙️Install prerequisites (once for a machine)
+4. **Start with TinaCMS**
+   ```bash
+   npm run tina:dev
+   ```
 
-- **Node Installation:** [Install node js](https://nodejs.org/en/download/) [Recommended LTS version]
+### Build for Production
 
-### 🖥️Local setup
-
-After successfully installing those dependencies, open this template with any IDE [[VS Code](https://code.visualstudio.com/) recommended], and then open the internal terminal of IDM [vs code shortcut <code>ctrl/cmd+\`</code>]
-
-- Install dependencies
-
-```
-npm install
-```
-
-- Run locally
-
-```
-npm run dev
-```
-
-After that, it will open up a preview of the template in your default browser, watch for changes to source files, and live-reload the browser when changes are saved.
-
-## 🔨Production Build
-
-After finishing all the customization, you can create a production build by running this command.
-
-```
+```bash
 npm run build
 ```
 
-<!-- reporting issue -->
+## 📁 Project Structure
 
-## 🐞Reporting Issues
+```
+src/
+├── content/
+│   ├── bars/           # Bar review content
+│   ├── spirits/        # Spirit review content
+│   ├── books/          # Book review content
+│   ├── authors/        # Author profiles
+│   └── pages/          # Static pages
+├── layouts/
+│   ├── Base.astro      # Base layout
+│   └── components/
+│       ├── CategoryBadge.astro    # Category badges
+│       ├── CategoryFilter.astro   # Filter component
+│       ├── ReviewCard.astro       # Review cards
+│       └── StarRating.astro       # Star ratings
+├── lib/
+│   ├── categoryParser.astro       # Multi-category utilities
+│   └── utils/                     # Helper functions
+├── pages/
+│   ├── index.astro               # Homepage
+│   ├── bars.astro               # Bars category page
+│   ├── spirits.astro            # Spirits category page
+│   ├── books.astro              # Books category page
+│   ├── bars/[slug].astro        # Individual bar reviews
+│   ├── spirits/[slug].astro     # Individual spirit reviews
+│   └── books/[slug].astro       # Individual book reviews
+└── config/
+    └── config.json              # Site configuration
+```
 
-We use GitHub Issues as the official bug tracker for this Template. Please Search [existing issues](https://github.com/themefisher/bookworm-light-astro/issues). It’s possible someone has already reported the same problem.
-If your problem or idea has not been addressed yet, feel free to [open a new issue](https://github.com/themefisher/bookworm-light-astro/issues).
+## 📝 Content Management
 
-<!-- licence -->
+### TinaCMS Setup
 
-## 📄License
+1. **Configure TinaCMS**
+   - Set up your TinaCMS account at [tina.io](https://tina.io)
+   - Add your `NEXT_PUBLIC_TINA_CLIENT_ID` and `TINA_TOKEN` to environment variables
 
-Copyright (c) 2023 - Present, Designed & Developed by [Themefisher](https://themefisher.com)
+2. **Access Admin Panel**
+   - Visit `/admin` when running the development server
+   - Authenticate with GitHub
 
-**Code License:** Released under the [MIT](https://github.com/themefisher/bookworm-light-astro/blob/main/LICENSE) license.
+### Content Schema
 
-**Image license:** The images are only for demonstration purposes. They have their license, we don't have permission to share those images.
+#### Bar Reviews
+```yaml
+---
+title: "Bar Name"
+slug: "bar-name"
+category: "bars"
+subcategory: "rooftop-bar"
+ratings:
+  ambience: 5
+  taste: 4
+  service: 4
+  overall: 4
+location:
+  name: "Bar Name"
+  address: "123 Street"
+  city: "Bangkok"
+  country: "Thailand"
+price_range: "$$$$"
+featured_image: "/images/bars/bar-name.jpg"
+---
+```
 
-## 👨‍💻Need Custom Development Services?
+#### Spirit Reviews
+```yaml
+---
+title: "Spirit Name"
+slug: "spirit-name"
+category: "spirits"
+subcategory: "whiskey"
+ratings:
+  complexity: 5
+  balance: 5
+  value: 3
+  overall: 4
+price_point: "฿18,500"
+alcohol_content: "43% ABV"
+origin: "Scotland"
+tasting_notes:
+  nose: "Rich dried fruits..."
+  palate: "Full-bodied with..."
+  finish: "Long and warming..."
+---
+```
 
-Besides developing beautifully designed and blazing-fast themes, we help businesses create fast, performance-focused, scalable & secure websites based on NextJs, Hugo, Astro, etc.
+#### Book Reviews
+```yaml
+---
+title: "Book Title"
+slug: "book-title"
+category: "books"
+subcategory: "fiction"
+ratings:
+  writing_quality: 4
+  engagement: 5
+  originality: 4
+  overall: 4
+book_author: "Author Name"
+publisher: "Publisher"
+publication_year: 2023
+pages: 400
+---
+```
 
-If you need a custom theme, theme customization, or complete website development services from scratch you can [Hire Us](https://themefisher.com/contact).
+## 🎨 Customization
+
+### Adding New Categories
+
+1. **Update Content Schema** (`src/content.config.ts`)
+2. **Add to TinaCMS Config** (`tina/config.ts`)
+3. **Create Category Page** (`src/pages/new-category.astro`)
+4. **Add Dynamic Routes** (`src/pages/new-category/[slug].astro`)
+5. **Update Category Filter** (`src/layouts/components/CategoryFilter.astro`)
+
+### Styling
+
+The website uses Tailwind CSS for styling. Key design tokens:
+
+- **Colors**: Primary brand colors defined in Tailwind config
+- **Typography**: Responsive typography scale
+- **Components**: Modular component system
+- **Icons**: Emoji icons for categories (🍸 🥃 📚)
+
+## 🔧 Configuration
+
+### Site Settings (`src/config/config.json`)
+
+```json
+{
+  "site": {
+    "title": "Prose & Palate | Bars, Spirits & Books",
+    "base_url": "https://prose-and-palate.netlify.app"
+  },
+  "settings": {
+    "pagination": 6,
+    "summary_length": 120
+  }
+}
+```
+
+### Environment Variables
+
+```env
+NEXT_PUBLIC_TINA_CLIENT_ID=your_client_id
+TINA_TOKEN=your_token
+```
+
+## 📱 Features in Detail
+
+### Homepage
+- Hero section with category statistics
+- Category filter tabs (All, Bars, Spirits, Books)
+- Mixed content grid with client-side filtering
+- Responsive design
+
+### Category Pages
+- Dedicated pages for each category
+- Category-specific headers and descriptions
+- Filtered content display
+- Empty states for categories without content
+
+### Individual Review Pages
+- Category-specific rating displays
+- Detailed metadata sections
+- Rich content with MDX support
+- Related reviews section
+- Social sharing optimization
+
+### Components
+
+#### StarRating
+- Visual star display (full, half, empty stars)
+- Configurable size (sm, md, lg)
+- Optional numeric display
+
+#### CategoryBadge
+- Color-coded category indicators
+- Icon + label format
+- Subcategory support
+
+#### ReviewCard
+- Responsive card layout
+- Category-specific metadata
+- Hover effects and transitions
+- Tag display with overflow handling
+
+## 🚀 Deployment
+
+### Netlify (Recommended)
+
+1. **Connect Repository**
+   - Link your GitHub repository to Netlify
+
+2. **Build Settings**
+   ```
+   Build command: npm run build
+   Publish directory: dist
+   ```
+
+3. **Environment Variables**
+   - Add TinaCMS credentials in Netlify dashboard
+
+### Vercel
+
+1. **Import Project**
+   - Import from GitHub
+
+2. **Configure Build**
+   - Framework: Astro
+   - Build command: `npm run build`
+   - Output directory: `dist`
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## 📄 License
+
+MIT License - see LICENSE file for details
+
+## 🆘 Support
+
+For issues and questions:
+- Check the [Astro documentation](https://docs.astro.build)
+- Review [TinaCMS docs](https://tina.io/docs)
+- Open an issue in this repository
+
+---
+
+**Prose & Palate** - Where taste meets literature ✨
