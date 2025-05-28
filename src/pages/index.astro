@@ -17,20 +17,6 @@ const categories = await getTaxonomy("posts", "categories");
 const totalPages = Math.ceil(posts.length / config.settings.pagination);
 const currentPosts = sortedPosts.slice(0, config.settings.pagination);
 
-// Get category statistics
-const getCategoryStats = () => {
-  const stats: { [key: string]: number } = {};
-  posts.forEach(post => {
-    post.data.categories.forEach(category => {
-      const normalizedCategory = category.toLowerCase();
-      stats[normalizedCategory] = (stats[normalizedCategory] || 0) + 1;
-    });
-  });
-  return stats;
-};
-
-const categoryStats = getCategoryStats();
-
 // Prepare posts data for client-side filtering
 const postsForClient = sortedPosts.map(post => ({
   id: post.id,
@@ -57,28 +43,6 @@ const postsForClient = sortedPosts.map(post => ({
         <p class="text-xl text-gray-600 mb-6 max-w-3xl mx-auto">
           Where taste meets literature. Curated reviews of exceptional bars, premium spirits, and captivating books.
         </p>
-        <div class="flex flex-wrap justify-center gap-6 text-sm text-gray-500">
-          <span class="flex items-center gap-2">
-            <span class="text-purple-500">🍸</span>
-            {categoryStats.bars || 0} Bar Reviews
-          </span>
-          <span class="flex items-center gap-2">
-            <span class="text-amber-500">🥃</span>
-            {categoryStats.spirits || 0} Spirit Reviews
-          </span>
-          <span class="flex items-center gap-2">
-            <span class="text-blue-500">📚</span>
-            {categoryStats.books || 0} Book Reviews
-          </span>
-          <span class="flex items-center gap-2">
-            <span class="text-gray-500">📝</span>
-            {categoryStats.development || 0} Development
-          </span>
-          <span class="flex items-center gap-2">
-            <span class="text-green-500">🎨</span>
-            {categoryStats.art || 0} Art
-          </span>
-        </div>
       </div>
 
       <!-- Category Filter -->
@@ -88,25 +52,14 @@ const postsForClient = sortedPosts.map(post => ({
             class="category-btn active inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-200 bg-primary text-white border-primary shadow-md"
             data-category="all"
           >
-            <span class="text-sm">🌟</span>
             <span class="font-medium">All</span>
           </button>
           {categories.map((category) => {
-            const categoryIcon = category === 'bars' ? '🍸' : 
-                                category === 'spirits' ? '🥃' : 
-                                category === 'books' ? '📚' : 
-                                category === 'development' ? '💻' : 
-                                category === 'art' ? '🎨' : 
-                                category === 'lifestyle' ? '🌿' : 
-                                category === 'food' ? '🍽️' : 
-                                category === 'accessories' ? '👜' : '📄';
-            
             return (
               <button
                 class="category-btn inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-200 bg-white text-gray-700 border-gray-200 hover:border-primary hover:text-primary hover:shadow-sm"
                 data-category={category}
               >
-                <span class="text-sm">{categoryIcon}</span>
                 <span class="font-medium">{humanize(category)}</span>
               </button>
             );
