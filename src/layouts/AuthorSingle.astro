@@ -28,7 +28,7 @@ const { Content } = await render(author);
       <h1 set:html={markdownify(title)} class="page-heading h2 mb-8" />
 
       <Social source={social} className="social-icons-simple" />
-      <div class="content">
+      <div class="content prose dark:prose-invert max-w-none">
         <Content />
       </div>
     </div>

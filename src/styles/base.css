@@ -53,3 +53,66 @@ strong {
 img {
   @apply inline-block;
 }
+
+/* Light mode variables are effectively set by tw-theme.mjs on :root */
+
+/* Explicit Dark Mode Variable Overrides */
+html.dark {
+  --color-primary: #c87533; /* from theme.json darkmode.theme_color.primary */
+  --color-body: #2a3b4c;    /* from theme.json darkmode.theme_color.body */
+  --color-border: #4A5568;   /* from theme.json darkmode.theme_color.border */
+  --color-light: #3c4d5e;   /* from theme.json darkmode.theme_color.light */
+  --color-dark: #f7f1e3;     /* from theme.json darkmode.theme_color.dark */
+
+  --color-text: #f7f1e3;      /* from theme.json darkmode.text_color.text */
+  --color-text-dark: #fefefe; /* from theme.json darkmode.text_color.text-dark */
+  --color-text-light: #cbd5e0; /* from theme.json darkmode.text_color.text-light */
+  
+  /* Ensure important base styles also use these variables correctly in dark mode */
+  /* For example, if body has text-text, it will now pick up the new --color-text */
+}
+
+/* Customizations for @tailwindcss/typography in dark mode */
+/* These ensure that prose text uses your theme's dark mode colors */
+.dark { /* This can be html.dark if more specificity is needed over prose's own .dark a.k.a. .dark:prose-invert */
+  /* Body text in prose */
+  --tw-prose-body: var(--color-text);
+  --tw-prose-invert-body: var(--color-text);
+
+  /* Headings in prose */
+  --tw-prose-headings: var(--color-text-dark);
+  --tw-prose-invert-headings: var(--color-text-dark);
+
+  /* Links in prose */
+  --tw-prose-links: var(--color-primary);
+  --tw-prose-invert-links: var(--color-primary); /* Assuming primary works well on dark, adjust if needed */
+
+  /* Bold text in prose */
+  --tw-prose-bold: var(--color-text-dark);
+  --tw-prose-invert-bold: var(--color-text-dark);
+
+  /* Other prose elements - you can extend this list as needed */
+  --tw-prose-captions: var(--color-text-light);
+  --tw-prose-invert-captions: var(--color-text-light);
+
+  --tw-prose-code: var(--color-text-dark);
+  --tw-prose-invert-code: var(--color-text-dark);
+  --tw-prose-pre-code: var(--color-text-dark); /* For code blocks */
+  --tw-prose-invert-pre-code: var(--color-text-dark);
+  --tw-prose-pre-bg: var(--color-light); /* Background for code blocks, using your theme's 'light' which is a dark gray in dark mode */
+  --tw-prose-invert-pre-bg: var(--color-light);
+
+  --tw-prose-blockquote-border-color: var(--color-primary);
+  --tw-prose-invert-blockquote-border-color: var(--color-primary);
+  --tw-prose-blockquote-text-color: var(--color-text-light);
+  --tw-prose-invert-blockquote-text-color: var(--color-text-light);
+  
+  --tw-prose-hr-border-color: var(--color-border);
+  --tw-prose-invert-hr-border-color: var(--color-border);
+
+  /* List bullets/numbers */
+  --tw-prose-bullets: var(--color-text-light);
+  --tw-prose-invert-bullets: var(--color-text-light);
+  --tw-prose-counters: var(--color-text-light);
+  --tw-prose-invert-counters: var(--color-text-light);
+}

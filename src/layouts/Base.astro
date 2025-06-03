@@ -169,6 +169,61 @@ const { title, meta_title, description, image, noindex, canonical } =
       }`}
     />
     <meta name="twitter:card" content="summary_large_image" />
+
+    <script is:inline>
+      const applyTheme = () => {
+        const theme = (() => {
+          if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+            return localStorage.getItem('theme');
+          }
+          if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return 'dark';
+          }
+          return 'light';
+        })();
+
+        if (theme === 'light') {
+          document.documentElement.classList.remove('dark');
+        } else {
+          document.documentElement.classList.add('dark');
+        }
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme') !== theme) {
+          localStorage.setItem('theme', theme);
+        }
+        // console.log('[ThemeApply] Applied theme:', theme, 'HTML classList:', document.documentElement.classList.toString()); // Optional: for debugging
+      };
+
+      applyTheme(); // Apply on initial load
+      document.addEventListener('astro:after-swap', applyTheme); // Re-apply after page transitions
+
+      window.toggleTheme = () => {
+        console.log('[ThemeToggle DEBUG] toggleTheme function CALLED.');
+        try {
+          const currentClassList = document.documentElement.classList.toString();
+          console.log('[ThemeToggle DEBUG] HTML classList BEFORE toggle:', currentClassList);
+          const currentThemeInStorage = localStorage.getItem('theme');
+          console.log('[ThemeToggle DEBUG] Theme in localStorage BEFORE toggle:', currentThemeInStorage);
+
+          let newTheme;
+          if (document.documentElement.classList.contains('dark')) {
+            newTheme = 'light';
+            document.documentElement.classList.remove('dark');
+            console.log('[ThemeToggle DEBUG] Determined new theme: LIGHT. Removed .dark class.');
+          } else {
+            newTheme = 'dark';
+            document.documentElement.classList.add('dark');
+            console.log('[ThemeToggle DEBUG] Determined new theme: DARK. Added .dark class.');
+          }
+          
+          localStorage.setItem('theme', newTheme);
+          console.log('[ThemeToggle DEBUG] Theme in localStorage AFTER toggle:', newTheme);
+          console.log('[ThemeToggle DEBUG] HTML classList AFTER toggle:', document.documentElement.classList.toString());
+
+        } catch (error) {
+          console.error('[ThemeToggle DEBUG] Error in toggleTheme:', error);
+        }
+      };
+    </script>
   </head>
   <body>
     <TwSizeIndicator />
