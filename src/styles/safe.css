@@ -11,6 +11,45 @@ input#nav-toggle:checked ~ #nav-menu {
   @apply block md:flex;
 }
 
+/* Mobile breakpoint: 768px (md in Tailwind) */
+
+/* Desktop navigation (768px and up) - CSS only */
+@media (min-width: 768px) {
+  .desktop-nav {
+    @apply flex;
+  }
+  
+  .mobile-nav {
+    @apply hidden;
+  }
+}
+
+/* Mobile navigation (below 768px) - JavaScript powered */
+@media (max-width: 767px) {
+  .desktop-nav {
+    @apply hidden;
+  }
+  
+  .mobile-nav {
+    @apply block;
+  }
+  
+  /* Mobile menu styles */
+  .mobile-menu-list {
+    top: 100%;
+  }
+  
+  .mobile-nav-link {
+    @apply text-lg font-semibold text-dark transition hover:text-primary;
+  }
+}
+
+/* Touch target improvements */
+#show-button,
+#hide-button {
+  @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
+}
+
 /* form style */
 .form-inputs * {
   @apply mb-5 leading-10;

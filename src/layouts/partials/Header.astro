@@ -16,6 +16,14 @@ export interface NavigationLink {
 }
 
 const { main }: { main: NavigationLink[] } = menu;
+
+// Flatten menu items for mobile (extract children from Pages menu)
+const mobileMenuItems = main.flatMap(item => {
+  if (item.hasChildren && item.children) {
+    return [...item.children];
+  }
+  return [item];
+});
 ---
 
 <header class="header pt-6">
@@ -24,36 +32,9 @@ const { main }: { main: NavigationLink[] } = menu;
     <div class="order-0">
       <Logo />
     </div>
-    <!-- navbar toggler -->
-    <input id="nav-toggle" type="checkbox" class="hidden" />
-    <label
-      id="show-button"
-      for="nav-toggle"
-      class="order-2 flex cursor-pointer items-center text-black md:order-1 md:hidden"
-    >
-      <svg class="h-6 fill-current" viewBox="0 0 20 20">
-        <title>Menu Open</title>
-        <path d="M0 3h20v2H0V3z m0 6h20v2H0V9z m0 6h20v2H0V0z"></path>
-      </svg>
-    </label>
-    <label
-      id="hide-button"
-      for="nav-toggle"
-      class="order-2 hidden cursor-pointer items-center text-black md:order-1"
-    >
-      <svg class="h-6 fill-current" viewBox="0 0 20 20">
-        <title>Menu Close</title>
-        <polygon
-          points="11 9 22 9 22 11 11 11 11 22 9 22 9 11 -2 11 -2 9 9 9 9 -2 11 -2"
-          transform="rotate(45 10 10)"></polygon>
-      </svg>
-    </label>
-    <!-- /navbar toggler -->
 
-    <ul
-      id="nav-menu"
-      class="navbar-nav order-3 hidden w-full md:order-1 md:flex md:w-auto"
-    >
+    <!-- DESKTOP NAVIGATION (md and up) - CSS only -->
+    <ul class="desktop-nav hidden md:flex md:order-1 md:w-auto navbar-nav">
       {
         main.map((menu) => (
           <>
@@ -86,15 +67,165 @@ const { main }: { main: NavigationLink[] } = menu;
         ))
       }
     </ul>
+
+    <!-- MOBILE NAVIGATION (below md) - JavaScript powered -->
+    <div class="mobile-nav md:hidden order-2">
+      <!-- Mobile hamburger/close button -->
+      <button
+        id="mobile-menu-toggle"
+        class="mobile-menu-btn flex cursor-pointer items-center text-black min-h-[44px] min-w-[44px] justify-center"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+      >
+        <!-- Hamburger icon -->
+        <svg id="hamburger-icon" class="h-6 fill-current" viewBox="0 0 20 20">
+          <title>Menu Open</title>
+          <path d="M0 3h20v2H0V3z m0 6h20v2H0V9z m0 6h20v2H0V0z"></path>
+        </svg>
+        <!-- Close icon (hidden by default) -->
+        <svg id="close-icon" class="h-6 fill-current hidden" viewBox="0 0 20 20">
+          <title>Menu Close</title>
+          <polygon
+            points="11 9 22 9 22 11 11 11 11 22 9 22 9 11 -2 11 -2 9 9 9 9 -2 11 -2"
+            transform="rotate(45 10 10)"></polygon>
+        </svg>
+      </button>
+      
+      <!-- Mobile menu (hidden by default) -->
+      <ul id="mobile-menu" class="mobile-menu-list hidden absolute left-0 w-full bg-white shadow-lg z-50 py-4" style="top: 100%;">
+        {
+          mobileMenuItems.map((item) => (
+            <li class="mobile-nav-item">
+              <a href={item.url} class="mobile-nav-link block w-full py-3 px-6 border-b border-gray-100 last:border-b-0">
+                {item.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <!-- Search button -->
     <div class="order-1 ml-auto flex md:order-2 md:ml-0">
       <a
         class="mr-4 inline-block cursor-pointer p-2 text-xl text-dark transition hover:text-primary md:mr-0"
         href="/search"
-        title="seach"
-        aria-label="seach"
+        title="search"
+        aria-label="search"
       >
         <IoSearch />
       </a>
     </div>
   </nav>
 </header>
+
+<script>
+  function setupMobileMenu() {
+    console.log('Setting up mobile menu...');
+    const MOBILE_BREAKPOINT = 768;
+    
+    // Use 'let' as these might be reassigned after cloning
+    let mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    let mobileMenu = document.getElementById('mobile-menu'); // This one is not cloned, so const is fine
+    let hamburgerIcon = document.getElementById('hamburger-icon');
+    let closeIcon = document.getElementById('close-icon');
+    
+    if (!mobileMenuToggle || !mobileMenu || !hamburgerIcon || !closeIcon) {
+        console.warn('Mobile menu elements not all found for setup. Header might not be on this page.');
+        return;
+    }
+    
+    let isMenuOpen = false;
+
+    // Clone and replace the toggle button to ensure fresh listeners, avoiding duplicates from astro:after-swap
+    const newMobileMenuToggle = mobileMenuToggle.cloneNode(true) as HTMLElement;
+    mobileMenuToggle.parentNode!.replaceChild(newMobileMenuToggle, mobileMenuToggle);
+    mobileMenuToggle = newMobileMenuToggle; // Update mobileMenuToggle to point to the new, active node
+
+    // IMPORTANT: Re-assign hamburgerIcon and closeIcon to the children of the NEW toggle button
+    hamburgerIcon = mobileMenuToggle.querySelector('#hamburger-icon');
+    closeIcon = mobileMenuToggle.querySelector('#close-icon');
+
+    // Safety check for re-queried icons
+    if (!hamburgerIcon || !closeIcon) {
+        console.warn('Failed to re-acquire icon elements after cloning toggle button.');
+        return;
+    }
+
+    function isMobile() {
+      return window.innerWidth < MOBILE_BREAKPOINT;
+    }
+
+    function toggleMobileMenu() {
+      if (!isMobile()) return;
+      
+      isMenuOpen = !isMenuOpen;
+      
+      if (isMenuOpen) {
+        mobileMenu!.classList.remove('hidden');
+        hamburgerIcon!.classList.add('hidden');
+        closeIcon!.classList.remove('hidden');
+        mobileMenuToggle!.setAttribute('aria-expanded', 'true');
+      } else {
+        mobileMenu!.classList.add('hidden');
+        hamburgerIcon!.classList.remove('hidden');
+        closeIcon!.classList.add('hidden');
+        mobileMenuToggle!.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    function closeMobileMenu() {
+      if (isMenuOpen) {
+        isMenuOpen = false;
+        mobileMenu!.classList.add('hidden');
+        hamburgerIcon!.classList.remove('hidden');
+        closeIcon!.classList.add('hidden');
+        mobileMenuToggle!.setAttribute('aria-expanded', 'false');
+      }
+    }
+    
+    mobileMenuToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleMobileMenu();
+    });
+
+    const mobileNavLinks = mobileMenu.querySelectorAll('.mobile-nav-link');
+    mobileNavLinks.forEach(link => {
+      const newLink = link.cloneNode(true) as HTMLElement;
+      link.parentNode!.replaceChild(newLink, link);
+      newLink.addEventListener('click', () => {
+        setTimeout(closeMobileMenu, 50);
+      });
+    });
+
+    const resizeHandler = () => {
+      if (!isMobile()) {
+        closeMobileMenu();
+      }
+    };
+
+    const clickOutsideHandler = (e: MouseEvent) => {
+      if (isMobile() && isMenuOpen && !mobileMenu!.contains(e.target as Node) && !mobileMenuToggle!.contains(e.target as Node)) {
+        closeMobileMenu();
+      }
+    };
+
+    if ((window as any)._mobileMenuResizeHandler) {
+      window.removeEventListener('resize', (window as any)._mobileMenuResizeHandler);
+    }
+    if ((document as any)._mobileMenuClickOutsideHandler) {
+      document.removeEventListener('click', (document as any)._mobileMenuClickOutsideHandler);
+    }
+
+    (window as any)._mobileMenuResizeHandler = resizeHandler;
+    (document as any)._mobileMenuClickOutsideHandler = clickOutsideHandler;
+    window.addEventListener('resize', (window as any)._mobileMenuResizeHandler);
+    document.addEventListener('click', (document as any)._mobileMenuClickOutsideHandler);
+    
+    console.log('Mobile navigation script setup complete.');
+  }
+
+  document.addEventListener('DOMContentLoaded', setupMobileMenu);
+  document.addEventListener('astro:after-swap', setupMobileMenu);
+</script>
