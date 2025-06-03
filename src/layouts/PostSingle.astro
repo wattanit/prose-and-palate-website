@@ -77,7 +77,7 @@ const { title, description, authors, categories, image, date, tags } =
         </ul>
       </div>
 
-      <div class="col-12 mt-8 mb-2">
+      <div class="col-12 md:col-10 lg:col-8 xl:col-6 mt-8 mb-2 mx-auto">
         {
           image && (
             <Image
@@ -85,7 +85,7 @@ const { title, description, authors, categories, image, date, tags } =
               height={500}
               width={1000}
               alt={title}
-              class="rounded-lg"
+              class="rounded-lg w-full"
             />
           )
         }
