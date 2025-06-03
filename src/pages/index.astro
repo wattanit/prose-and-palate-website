@@ -37,10 +37,10 @@ const postsForClient = sortedPosts.map(post => ({
     <div class="container">
       <!-- Hero Section -->
       <div class="text-center mb-12">
-        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+        <h1 class="text-4xl md:text-5xl font-bold text-text-dark mb-4">
           Prose & Palate
         </h1>
-        <p class="text-xl text-gray-600 mb-6 max-w-3xl mx-auto">
+        <p class="text-xl text-text mb-6 max-w-3xl mx-auto">
           Where taste meets literature. Curated reviews of exceptional bars, premium spirits, and captivating books.
         </p>
       </div>
@@ -57,7 +57,7 @@ const postsForClient = sortedPosts.map(post => ({
           {categories.map((category) => {
             return (
               <button
-                class="category-btn inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-200 bg-white text-gray-700 border-gray-200 hover:border-primary hover:text-primary hover:shadow-sm"
+                class="category-btn inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-200 bg-body text-text border-border hover:border-primary hover:text-primary hover:shadow-sm dark:bg-body dark:text-text dark:border-border dark:hover:border-primary dark:hover:text-primary"
                 data-category={category}
               >
                 <span class="font-medium">{humanize(category)}</span>
@@ -74,9 +74,9 @@ const postsForClient = sortedPosts.map(post => ({
 
       <!-- Empty State (hidden by default) -->
       <div id="empty-state" class="text-center py-12 hidden">
-        <div class="text-gray-400 text-6xl mb-4">🔍</div>
-        <h3 class="text-xl font-semibold text-gray-600 mb-2">No posts found</h3>
-        <p class="text-gray-500">Try selecting a different category or check back later for new content.</p>
+        <div class="text-text-light text-6xl mb-4">🔍</div>
+        <h3 class="text-xl font-semibold text-text-dark mb-2">No posts found</h3>
+        <p class="text-text">Try selecting a different category or check back later for new content.</p>
       </div>
     </div>
   </section>
@@ -84,13 +84,14 @@ const postsForClient = sortedPosts.map(post => ({
 
 <script>
   // Use event delegation to ensure handlers always work
-  document.addEventListener('click', function(e) {
-    if (e.target.closest('.category-btn')) {
+  document.addEventListener('click', function(e: MouseEvent) {
+    const target = e.target as HTMLElement;
+    if (target && target.closest('.category-btn')) {
       e.preventDefault();
-      const button = e.target.closest('.category-btn');
+      const button = target.closest('.category-btn') as HTMLElement;
       const selectedCategory = button.getAttribute('data-category');
       
-      handleCategoryFilter(selectedCategory);
+      handleCategoryFilter(selectedCategory || 'all');
     }
   });
 
@@ -113,7 +114,7 @@ const postsForClient = sortedPosts.map(post => ({
     setTimeout(initializeFromURL, 50);
   });
 
-  function handleCategoryFilter(selectedCategory) {
+  function handleCategoryFilter(selectedCategory: string) {
     updateActiveButton(selectedCategory);
     filterPosts(selectedCategory);
     
@@ -131,23 +132,40 @@ const postsForClient = sortedPosts.map(post => ({
     filterPosts(category);
   }
 
-  function updateActiveButton(selectedCategory) {
+  function updateActiveButton(selectedCategory: string) {
     const categoryButtons = document.querySelectorAll('.category-btn');
     categoryButtons.forEach(btn => {
-      const btnCategory = btn.getAttribute('data-category');
+      const htmlBtn = btn as HTMLElement;
+      const btnCategory = htmlBtn.getAttribute('data-category');
+
+      // Reset classes to a common base state before applying active/inactive specifics
+      htmlBtn.classList.remove(
+        'bg-primary', 'text-white', 'border-primary', 'shadow-md', // Active state classes
+        'bg-body', 'text-text', 'border-border', // Base inactive state classes (light/dark aware)
+        'dark:bg-body', 'dark:text-text', 'dark:border-border', // Explicit dark for base (might be redundant if bg-body etc. are fully dynamic)
+        'hover:border-primary', 'hover:text-primary', 'hover:shadow-sm',
+        'dark:hover:border-primary', 'dark:hover:text-primary'
+      );
+
       if (btnCategory === selectedCategory) {
-        btn.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
-        btn.classList.add('bg-primary', 'text-white', 'border-primary', 'shadow-md');
+        // Active button: Primary background, white text (usually fine for both themes)
+        htmlBtn.classList.add('bg-primary', 'text-white', 'border-primary', 'shadow-md');
       } else {
-        btn.classList.remove('bg-primary', 'text-white', 'border-primary', 'shadow-md');
-        btn.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
+        // Inactive button: Theme-aware body background, text, and border
+        // The dark:* variants in the initial class attribute handle dark mode for inactive buttons.
+        // The js only needs to ensure the base classes are correctly applied for light mode / default inheritance.
+        htmlBtn.classList.add(
+          'bg-body', 'text-text', 'border-border',
+          'hover:border-primary', 'hover:text-primary', 'hover:shadow-sm'
+          // No need to add dark:* here as they are in the static class list or handled by var() in bg-body etc.
+        );
       }
     });
   }
 
-  function filterPosts(selectedCategory) {
-    const postsContainer = document.getElementById('posts-container');
-    const emptyState = document.getElementById('empty-state');
+  function filterPosts(selectedCategory: string) {
+    const postsContainer = document.getElementById('posts-container') as HTMLElement | null;
+    const emptyState = document.getElementById('empty-state') as HTMLElement | null;
     
     if (!postsContainer) return;
 
@@ -156,17 +174,18 @@ const postsForClient = sortedPosts.map(post => ({
     let visibleCount = 0;
     
     allPostElements.forEach(postEl => {
-      const categoryLinks = postEl.querySelectorAll('a[href^="/categories/"]');
+      const htmlPostEl = postEl as HTMLElement;
+      const categoryLinks = htmlPostEl.querySelectorAll('a[href^="/categories/"]');
       const categories = Array.from(categoryLinks).map(link => {
         const href = link.getAttribute('href');
         return href ? href.replace('/categories/', '').toLowerCase() : '';
       }).filter(cat => cat);
       
       if (selectedCategory === 'all' || categories.includes(selectedCategory.toLowerCase())) {
-        postEl.style.display = '';
+        htmlPostEl.style.display = '';
         visibleCount++;
       } else {
-        postEl.style.display = 'none';
+        htmlPostEl.style.display = 'none';
       }
     });
 

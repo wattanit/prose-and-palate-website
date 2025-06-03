@@ -7,6 +7,7 @@ version 0.3
 - **Base Template:** Bookworm Light Astro (MIT License)
 - **CMS:** TinaCMS integration for content management
 - **Styling:** Tailwind CSS (already included in template)
+  - **IMPORTANT Configuration Note:** This project uses a custom Tailwind CSS plugin system, loading plugins (e.g., `src/tailwind-plugin/tw-theme.mjs`) via `@plugin` directives in `src/styles/main.css`. **DO NOT introduce a standard `tailwind.config.js` or `tailwind.config.mjs` file.** Doing so will break the existing theme and dark mode implementation, which relies on CSS variables defined and overridden through this custom plugin structure and direct CSS in `src/styles/base.css`. All theme color definitions and dark mode logic are managed via `src/config/theme.json`, `src/tailwind-plugin/tw-theme.mjs`, and `src/styles/base.css`.
 - **Deployment:** Netlify (pre-configured in template)
 
 ## **Branding & Visual Identity**
