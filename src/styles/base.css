@@ -74,45 +74,81 @@ html.dark {
 
 /* Customizations for @tailwindcss/typography in dark mode */
 /* These ensure that prose text uses your theme's dark mode colors */
-.dark { /* This can be html.dark if more specificity is needed over prose's own .dark a.k.a. .dark:prose-invert */
-  /* Body text in prose */
-  --tw-prose-body: var(--color-text);
-  --tw-prose-invert-body: var(--color-text);
+html.dark .prose {
+  --tw-prose-body: var(--color-text) !important;
+  --tw-prose-headings: var(--color-text-dark) !important;
+  --tw-prose-links: var(--color-primary) !important;
+  --tw-prose-bold: var(--color-text-dark) !important;
+  --tw-prose-captions: var(--color-text-light) !important;
+  --tw-prose-code: var(--color-text-dark) !important;
+  --tw-prose-pre-code: var(--color-text-dark) !important;
+  --tw-prose-pre-bg: var(--color-light) !important;
+  --tw-prose-blockquote-border-color: var(--color-primary) !important;
+  --tw-prose-blockquote-text-color: var(--color-text-light) !important;
+  --tw-prose-hr-border-color: var(--color-border) !important;
+  --tw-prose-bullets: var(--color-text-light) !important;
+  --tw-prose-counters: var(--color-text-light) !important;
 
-  /* Headings in prose */
-  --tw-prose-headings: var(--color-text-dark);
-  --tw-prose-invert-headings: var(--color-text-dark);
+  /* Explicitly set --tw-prose-invert-* variables as well for good measure */
+  --tw-prose-invert-body: var(--color-text) !important;
+  --tw-prose-invert-headings: var(--color-text-dark) !important;
+  --tw-prose-invert-links: var(--color-primary) !important;
+  --tw-prose-invert-bold: var(--color-text-dark) !important;
+  --tw-prose-invert-captions: var(--color-text-light) !important;
+  --tw-prose-invert-code: var(--color-text-dark) !important;
+  --tw-prose-invert-pre-code: var(--color-text-dark) !important;
+  --tw-prose-invert-pre-bg: var(--color-light) !important;
+  --tw-prose-invert-blockquote-border-color: var(--color-primary) !important;
+  --tw-prose-invert-blockquote-text-color: var(--color-text-light) !important;
+  --tw-prose-invert-hr-border-color: var(--color-border) !important;
+  --tw-prose-invert-bullets: var(--color-text-light) !important;
+  --tw-prose-invert-counters: var(--color-text-light) !important;
+}
 
-  /* Links in prose */
-  --tw-prose-links: var(--color-primary);
-  --tw-prose-invert-links: var(--color-primary); /* Assuming primary works well on dark, adjust if needed */
+/* Dark mode for form inputs */
+html.dark .form-input {
+  background-color: var(--color-light) !important;
+  color: var(--color-text) !important; /* Ensure text color uses the dark mode variable */
+}
 
-  /* Bold text in prose */
-  --tw-prose-bold: var(--color-text-dark);
-  --tw-prose-invert-bold: var(--color-text-dark);
+html.dark .form-input::placeholder {
+  color: var(--color-text-light);
+  opacity: 1; /* Firefox shows a lower opacity by default */
+}
 
-  /* Other prose elements - you can extend this list as needed */
-  --tw-prose-captions: var(--color-text-light);
-  --tw-prose-invert-captions: var(--color-text-light);
+html.dark .form-textarea {
+  background-color: var(--color-light) !important;
+  color: var(--color-text) !important;
+}
 
-  --tw-prose-code: var(--color-text-dark);
-  --tw-prose-invert-code: var(--color-text-dark);
-  --tw-prose-pre-code: var(--color-text-dark); /* For code blocks */
-  --tw-prose-invert-pre-code: var(--color-text-dark);
-  --tw-prose-pre-bg: var(--color-light); /* Background for code blocks, using your theme's 'light' which is a dark gray in dark mode */
-  --tw-prose-invert-pre-bg: var(--color-light);
+html.dark .form-textarea::placeholder {
+  color: var(--color-text-light);
+  opacity: 1; /* Firefox shows a lower opacity by default */
+}
 
-  --tw-prose-blockquote-border-color: var(--color-primary);
-  --tw-prose-invert-blockquote-border-color: var(--color-primary);
-  --tw-prose-blockquote-text-color: var(--color-text-light);
-  --tw-prose-invert-blockquote-text-color: var(--color-text-light);
-  
-  --tw-prose-hr-border-color: var(--color-border);
-  --tw-prose-invert-hr-border-color: var(--color-border);
+/* Override browser autofill styles for dark mode */
+html.dark input:-webkit-autofill,
+html.dark input:-webkit-autofill:hover,
+html.dark input:-webkit-autofill:focus,
+html.dark input:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--color-text) !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--color-light) inset !important;
+  background-color: var(--color-light) !important; /* Fallback */
+  color: var(--color-text) !important; /* Fallback */
+  caret-color: var(--color-text) !important;
+  border-color: var(--color-border) !important; /* Assuming you want the themed border */
+  transition: background-color 5000s ease-in-out 0s; /* Trick to ensure styles apply */
+}
 
-  /* List bullets/numbers */
-  --tw-prose-bullets: var(--color-text-light);
-  --tw-prose-invert-bullets: var(--color-text-light);
-  --tw-prose-counters: var(--color-text-light);
-  --tw-prose-invert-counters: var(--color-text-light);
+html.dark textarea:-webkit-autofill,
+html.dark textarea:-webkit-autofill:hover,
+html.dark textarea:-webkit-autofill:focus,
+html.dark textarea:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--color-text) !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--color-light) inset !important;
+  background-color: var(--color-light) !important;
+  color: var(--color-text) !important;
+  caret-color: var(--color-text) !important;
+  border-color: var(--color-border) !important;
+  transition: background-color 5000s ease-in-out 0s;
 }

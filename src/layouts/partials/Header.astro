@@ -46,10 +46,10 @@ const mobileMenuItems = main.flatMap(item => {
                     <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                   </svg>
                 </span>
-                <ul class="nav-dropdown-list hidden group-hover:block md:invisible md:absolute md:block md:opacity-0 md:group-hover:visible md:group-hover:opacity-100">
+                <ul class="nav-dropdown-list hidden group-hover:block md:invisible md:absolute md:block md:opacity-0 md:group-hover:visible md:group-hover:opacity-100 bg-body shadow-lg border border-border rounded-md py-1">
                   {menu.children?.map((child) => (
                     <li class="nav-dropdown-item">
-                      <a href={child.url} class="nav-dropdown-link">
+                      <a href={child.url} class="nav-dropdown-link block px-4 py-2 text-sm text-text hover:text-primary hover:bg-border">
                         {child.name}
                       </a>
                     </li>
@@ -73,7 +73,7 @@ const mobileMenuItems = main.flatMap(item => {
       <!-- Mobile hamburger/close button -->
       <button
         id="mobile-menu-toggle"
-        class="mobile-menu-btn flex cursor-pointer items-center text-black min-h-[44px] min-w-[44px] justify-center"
+        class="mobile-menu-btn flex cursor-pointer items-center text-text-dark min-h-[44px] min-w-[44px] justify-center"
         aria-label="Toggle navigation menu"
         aria-expanded="false"
       >
@@ -92,11 +92,11 @@ const mobileMenuItems = main.flatMap(item => {
       </button>
       
       <!-- Mobile menu (hidden by default) -->
-      <ul id="mobile-menu" class="mobile-menu-list hidden absolute left-0 w-full bg-white shadow-lg z-50 py-4" style="top: 100%;">
+      <ul id="mobile-menu" class="mobile-menu-list hidden absolute left-0 w-full bg-body shadow-lg z-50 border-t border-border" style="top: 100%;">
         {
           mobileMenuItems.map((item) => (
             <li class="mobile-nav-item">
-              <a href={item.url} class="mobile-nav-link block w-full py-3 px-6 border-b border-gray-100 last:border-b-0">
+              <a href={item.url} class="mobile-nav-link block w-full py-3 px-6 text-text hover:text-primary hover:bg-border border-b border-border last:border-b-0">
                 {item.name}
               </a>
             </li>
@@ -107,7 +107,7 @@ const mobileMenuItems = main.flatMap(item => {
 
     <!-- Search button -->
     <div class="order-1 ml-auto flex items-center md:order-2 md:ml-0">
-      {/* Theme Toggle Button */}
+      <!-- Theme Toggle Button -->
       <button
         id="theme-toggle-button"
         onclick="window.toggleTheme()"
