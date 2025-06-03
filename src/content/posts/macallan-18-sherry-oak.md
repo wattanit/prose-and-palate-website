@@ -7,10 +7,10 @@ image: "/images/posts/04.jpg"
 categories: ["spirits"]
 authors: ["Admin"]
 tags: ["scotch", "single-malt", "sherry-cask", "premium", "macallan", "speyside"]
-draft: false
+draft: true
 ---
 
-# The Crown Jewel of Speyside
+# [PLACE HOLDER] The Crown Jewel of Speyside
 
 The **Macallan 18 Sherry Oak** stands as one of the most revered expressions in the world of single malt Scotch whisky. This iconic dram represents the pinnacle of The Macallan's sherry oak maturation process, spending 18 years exclusively in hand-picked sherry seasoned oak casks from Jerez, Spain.
 

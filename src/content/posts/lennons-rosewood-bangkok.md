@@ -7,10 +7,10 @@ image: "/images/posts/01.jpg"
 categories: ["bars"]
 authors: ["Admin"]
 tags: ["bangkok", "hotel-bar", "premium", "cocktails", "rooftop", "skyline-views"]
-draft: false
+draft: true
 ---
 
-# Elevated Elegance Above Bangkok
+# [PLACE HOLDER] Elevated Elegance Above Bangkok
 
 Perched on the 30th floor of the prestigious Rosewood Bangkok, **Lennon's** offers one of the city's most sophisticated rooftop experiences. Named after the legendary John Lennon, this sky-high sanctuary combines impeccable cocktail craftsmanship with breathtaking panoramic views of Bangkok's glittering skyline.
 

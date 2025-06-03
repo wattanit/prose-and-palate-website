@@ -7,10 +7,10 @@ image: "/images/posts/06.jpg"
 categories: ["books"]
 authors: ["Admin"]
 tags: ["contemporary-fiction", "hollywood", "lgbtq", "romance", "secrets", "celebrity"]
-draft: false
+draft: true
 ---
 
-# A Dazzling Portrait of Love and Ambition
+# [PLACE HOLDER] A Dazzling Portrait of Love and Ambition
 
 **The Seven Husbands of Evelyn Hugo** by Taylor Jenkins Reid is a masterfully crafted novel that pulls back the velvet curtain on Golden Age Hollywood to reveal a story of love, ambition, sacrifice, and the price of fame.
 
