@@ -34,11 +34,35 @@ export interface Props {
   image?: string;
   noindex?: boolean;
   canonical?: string;
+  // Enhanced props for rich previews
+  date?: Date | string;
+  categories?: string[];
+  tags?: string[];
+  is_post?: boolean;
 }
 
 // distructure frontmatters
-const { title, meta_title, description, image, noindex, canonical } =
-  Astro.props;
+const { 
+  title, 
+  meta_title, 
+  description, 
+  image, 
+  noindex, 
+  canonical,
+  date,
+  categories,
+  tags,
+  is_post 
+} = Astro.props;
+
+// Construct clean URL without double slashes
+const cleanUrl = `${config.site.base_url}${Astro.url.pathname}`.replace(/([^:]\/)\/+/g, "$1");
+
+// Determine content type for Open Graph
+const contentType = is_post ? "article" : "website";
+
+// Format date for article metadata
+const formattedDate = date ? new Date(date).toISOString() : undefined;
 ---
 
 <!doctype html>
@@ -116,59 +140,69 @@ const { title, meta_title, description, image, noindex, canonical } =
     <!-- author from config.json -->
     <meta name="author" content={config.metadata.meta_author} />
 
-    <!-- og-title -->
+    <!-- Enhanced Open Graph meta tags -->
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content={config.site.title} />
+    <meta property="og:type" content={contentType} />
     <meta
       property="og:title"
       content={plainify(
         meta_title ? meta_title : title ? title : config.site.title
       )}
     />
-
-    <!-- og-description -->
     <meta
       property="og:description"
       content={plainify(
         description ? description : config.metadata.meta_description
       )}
     />
-    <meta property="og:type" content="website" />
-    <meta
-      property="og:url"
-      content={`${config.site.base_url}/${Astro.url.pathname.replace("/", "")}`}
-    />
-
-    <!-- twitter-title -->
-    <meta
-      name="twitter:title"
-      content={plainify(
-        meta_title ? meta_title : title ? title : config.site.title
-      )}
-    />
-
-    <!-- twitter-description -->
-    <meta
-      name="twitter:description"
-      content={plainify(
-        description ? description : config.metadata.meta_description
-      )}
-    />
-
-    <!-- og-image -->
+    <meta property="og:url" content={cleanUrl} />
     <meta
       property="og:image"
       content={`${config.site.base_url}${
         image ? image : config.metadata.meta_image
       }`}
     />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/jpeg" />
 
-    <!-- twitter-image -->
+    <!-- Article-specific Open Graph tags for blog posts -->
+    {is_post && formattedDate && (
+      <meta property="article:published_time" content={formattedDate} />
+    )}
+    {is_post && categories && categories.map(category => (
+      <meta property="article:section" content={category} />
+    ))}
+    {is_post && tags && tags.map(tag => (
+      <meta property="article:tag" content={tag} />
+    ))}
+
+    <!-- Enhanced Twitter Card meta tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@proseandpalate" />
+    <meta name="twitter:creator" content="@proseandpalate" />
+    <meta
+      name="twitter:title"
+      content={plainify(
+        meta_title ? meta_title : title ? title : config.site.title
+      )}
+    />
+    <meta
+      name="twitter:description"
+      content={plainify(
+        description ? description : config.metadata.meta_description
+      )}
+    />
     <meta
       name="twitter:image"
       content={`${config.site.base_url}${
         image ? image : config.metadata.meta_image
       }`}
     />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image:alt" content={plainify(
+      meta_title ? meta_title : title ? title : config.site.title
+    )} />
 
     <script is:inline>
       const applyTheme = () => {

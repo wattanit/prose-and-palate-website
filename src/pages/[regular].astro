@@ -24,6 +24,12 @@ export async function getStaticPaths() {
 
 const { page } = Astro.props;
 const { title, meta_title, description, image } = page.data;
+const isPost = postsSlug.includes(page.id);
+
+// Safely extract blog post specific properties
+const date = isPost ? (page.data as any).date : undefined;
+const categories = isPost ? (page.data as any).categories : undefined;
+const tags = isPost ? (page.data as any).tags : undefined;
 ---
 
 <Base
@@ -31,9 +37,13 @@ const { title, meta_title, description, image } = page.data;
   meta_title={meta_title}
   description={description}
   image={image}
+  date={date}
+  categories={categories}
+  tags={tags}
+  is_post={isPost}
 >
   {
-    postsSlug.includes(page.id) ? (
+    isPost ? (
       <PostSingle post={page} />
     ) : (
       <Default data={page} />
