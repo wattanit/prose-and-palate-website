@@ -1,7 +1,7 @@
 {
   "site": {
     "title": "Prose & Palate | Bars & Books",
-    "base_url": "https://prose-and-palate.vercel.app",
+    "base_url": "https://www.prosepalate.com",
     "base_path": "/",
     "trailing_slash": false,
     "favicon": "/images/favicon.png",
