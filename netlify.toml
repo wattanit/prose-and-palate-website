@@ -10,3 +10,24 @@ X-Frame-Options = "DENY"
 X-XSS-Protection = "1; mode=block"
 Referrer-Policy = "same-origin"
 Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+
+# Image Content-Type headers for Open Graph compatibility
+[[headers]]
+for = "/*.jpg"
+[headers.values]
+Content-Type = "image/jpeg"
+
+[[headers]]
+for = "/*.jpeg"
+[headers.values]
+Content-Type = "image/jpeg"
+
+[[headers]]
+for = "/*.png"
+[headers.values]
+Content-Type = "image/png"
+
+[[headers]]
+for = "/*.webp"
+[headers.values]
+Content-Type = "image/webp"
