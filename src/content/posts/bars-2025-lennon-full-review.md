@@ -6,7 +6,7 @@ date: 2025-06-03T12:00:00Z
 image: "/images/posts/bars/2025/lennons/1.jpg"
 categories: ["bars"]
 authors: ["Tony Palate"]
-tags: ["bangkok", "hotel-bar", "premium", "cocktails", "rooftop", "skyline-views"]
+tags: ["bangkok", "hotel-bar", "cocktail-bar","cocktails", "rooftop", "skyline-views"]
 draft: false
 ---
 
@@ -62,12 +62,20 @@ Here's the twist: in a city overflowing with rooftop bars trading on views and v
 
 The view is undeniably spectacular (Bangkok's skyline doesn't disappoint), but more importantly, the cocktail in your hand rewards attention rather than just providing a pretty backdrop for photos. This is where you bring visitors who want to experience Bangkok's sophisticated side, or where you return when you want drinks that justify the investment.
 
-**Ambience:** ★★★★☆ (4/5) - *Sophisticated without being stuffy*  
-**Taste:** ★★★★☆ (4/5) - *Complex cocktails that earn their price point*  
-**Service:** ★★★★☆ (4/5) - *Professional and knowledgeable*  
-**Value:** ★★★☆☆ (3/5) - *Premium pricing, but expected given the location*
+_Cocktail Rating_:  
+**Skill**: 3  
+**Recipe**: 4  
+**Ingredients**: 3
 
-**Overall:** ★★★★☆ (4/5) - *A rooftop bar with good views and great drinks*
+**Overall**: 3.4
+
+_Place Rating_:  
+**Taste**: 3 - *Complex cocktails that earn their price point*  
+**Ambiance**: 4 - *Sophisticated without being stuffy*  
+**Service**: 4  - *Professional and knowledgeable*   
+**Value**: 3 - *Premium pricing, but expected given the location*
+
+**Overall** 3.4 - *A rooftop bar with good views and great drinks*
 
 ---
 
@@ -77,3 +85,7 @@ The view is undeniably spectacular (Bangkok's skyline doesn't disappoint), but m
 *Reservations:* Essential for weekends, smart for weekdays  
 *Price Range:* ฿฿฿฿ (Cocktails 480-520 THB plus service and tax)  
 *Perfect For:* Impressing visitors, celebrating something special, or when you want cocktails that justify the splurge 
+
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.5756824779514!2d100.54792720030827!3d13.744120279133499!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29f3abaf55835%3A0x24adb9fd3d7ad7af!2sLennon&#39;s!5e0!3m2!1sen!2sth!4v1752917825043!5m2!1sen!2sth" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+---
