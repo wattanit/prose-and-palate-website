@@ -122,6 +122,61 @@ const { title, description, authors, categories, image, date, tags } =
   </div>
 </section>
 
+<script>
+  function initLightbox() {
+    const contentImages = document.querySelectorAll<HTMLImageElement>('.content img');
+
+    contentImages.forEach((img) => {
+      img.addEventListener('click', () => {
+        const overlay = document.createElement('div');
+        overlay.className = 'lightbox-overlay';
+
+        const lightboxImg = document.createElement('img');
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'lightbox-close';
+        closeBtn.setAttribute('aria-label', 'Close lightbox');
+        closeBtn.innerHTML = '&times;';
+
+        overlay.appendChild(lightboxImg);
+        overlay.appendChild(closeBtn);
+
+        // Capture scroll position before locking (iOS Safari fix)
+        const scrollY = window.scrollY;
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${scrollY}px`;
+        document.body.style.width = '100%';
+
+        document.body.appendChild(overlay);
+
+        const close = () => {
+          overlay.remove();
+          document.body.style.position = '';
+          document.body.style.top = '';
+          document.body.style.width = '';
+          window.scrollTo(0, scrollY);
+        };
+
+        closeBtn.addEventListener('click', close);
+        overlay.addEventListener('click', (e) => {
+          if (e.target === overlay) close();
+        });
+        document.addEventListener('keydown', function onKey(e) {
+          if (e.key === 'Escape') {
+            close();
+            document.removeEventListener('keydown', onKey);
+          }
+        });
+      });
+    });
+  }
+
+  // Run on initial load and after Astro view transitions
+  document.addEventListener('astro:page-load', initLightbox);
+</script>
+
 <!-- similar posts -->
 {
   similarPosts.length > 0 && (
