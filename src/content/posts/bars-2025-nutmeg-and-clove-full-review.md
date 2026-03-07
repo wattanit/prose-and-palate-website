@@ -44,7 +44,7 @@ This is where the "classic twist" concept feels stretched. The drink tastes pred
 
 ![](/images/posts/bars/2025/nutmeg-clove/9.jpg)
 
-## Execution and Verdict
+## Execution and Final Thoughts
 
 The technical skill on display is good—solid, consistent, and capable of handling a busy service. However, it feels functional rather than exceptional. The bartenders execute the recipes well, but the spark of "craft" sometimes feels lost in the volume of service.
 

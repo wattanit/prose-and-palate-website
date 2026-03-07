@@ -52,7 +52,7 @@ From this menu, the **Rum Old Fashioned** was a pleasant surprise. Made with dar
 
 ![](/images/posts/bars/2025/dimple/11.jpg)
 
-## Verdict
+## Final Thoughts
 
 Dimple is a bar that understands that a "twist" shouldn't mean "unrecognizable." By focusing on infused spirits rather than cluttered recipes, they offer a drinking experience that feels both novel and comforting. It is the perfect alternative when you want high-quality execution without the high-volume noise of the more famous spots nearby.
 
