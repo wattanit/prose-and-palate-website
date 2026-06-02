@@ -1,6 +1,7 @@
 ---
 import config from "@/config/config.json";
 import Base from "@/layouts/Base.astro";
+import Pagination from "@/layouts/components/Pagination.astro";
 import Posts from "@/layouts/Posts.astro";
 import { getSinglePage } from "@/lib/contentParser.astro";
 import { getTaxonomy } from "@/lib/taxonomyParser.astro";
@@ -70,6 +71,7 @@ const postsForClient = sortedPosts.map(post => ({
       <!-- Posts Grid -->
       <div id="posts-container" data-all-posts>
         <Posts className="mb-16" posts={currentPosts} />
+        <Pagination totalPages={totalPages} currentPage={1} />
       </div>
 
       <!-- Empty State (hidden by default) -->
