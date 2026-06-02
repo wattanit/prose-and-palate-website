@@ -3,6 +3,7 @@
     "default": {
       "theme_color": {
         "primary": "#4e1e28",
+        "footer_bg": "#4e1e28",
         "body": "#f4efe8",
         "border": "#ddd5c8",
         "light": "#fdfbf8",
@@ -17,6 +18,7 @@
     "darkmode": {
       "theme_color": {
         "primary": "#c4677a",
+        "footer_bg": "#4e1e28",
         "body": "#2a3b4c",
         "border": "#4A5568",
         "light": "#3c4d5e",
