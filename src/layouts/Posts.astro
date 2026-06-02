@@ -23,7 +23,11 @@ const { className, posts, fluid } = Astro.props;
 >
   {
     posts.map((post, i: number) => (
-      <div class={i === 0 && fluid != false ? "col-12 md:col-10 lg:col-8 xl:col-6 mx-auto" : "col-12 sm:col-6"}>
+      <div
+        class={i === 0 && fluid != false ? "col-12 md:col-10 lg:col-8 xl:col-6 mx-auto" : "col-12 sm:col-6"}
+        data-animate
+        data-stagger-delay={`${Math.min(i * 0.06, 0.3)}s`}
+      >
         {post.data.image && (
           <a
             href={`/${post.id}`}
