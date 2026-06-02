@@ -58,18 +58,15 @@ img {
 
 /* Explicit Dark Mode Variable Overrides */
 html.dark {
-  --color-primary: #c87533; /* from theme.json darkmode.theme_color.primary */
-  --color-body: #2a3b4c;    /* from theme.json darkmode.theme_color.body */
-  --color-border: #4A5568;   /* from theme.json darkmode.theme_color.border */
-  --color-light: #3c4d5e;   /* from theme.json darkmode.theme_color.light */
-  --color-dark: #f7f1e3;     /* from theme.json darkmode.theme_color.dark */
+  --color-primary: #c4677a;
+  --color-body: #2a3b4c;
+  --color-border: #4A5568;
+  --color-light: #3c4d5e;
+  --color-dark: #b8ccd8;
 
-  --color-text: #f7f1e3;      /* from theme.json darkmode.text_color.text */
-  --color-text-dark: #fefefe; /* from theme.json darkmode.text_color.text-dark */
-  --color-text-light: #cbd5e0; /* from theme.json darkmode.text_color.text-light */
-  
-  /* Ensure important base styles also use these variables correctly in dark mode */
-  /* For example, if body has text-text, it will now pick up the new --color-text */
+  --color-text: #8fa8be;
+  --color-text-dark: #b8ccd8;
+  --color-text-light: #5a7a8e;
 }
 
 /* Customizations for @tailwindcss/typography in dark mode */
