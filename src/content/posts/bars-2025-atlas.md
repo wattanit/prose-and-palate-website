@@ -50,7 +50,7 @@ Atlas also features a "Cocktail of the Month." During my visit, this was a **Cha
 
 ![](/images/posts/bars/2025/atlas/12.jpg)
 
-## Verdict
+## Final Thoughts
 
 Atlas is a "bucket list" bar. For those who value serenity and the intimacy of a hidden speakeasy, the buzzing, tourist-heavy energy might be overwhelming. However, if you can appreciate the sheer scale of the operation and the technical skill required to maintain quality in such a cavernous space, it is an essential visit. It is one of the few places where the "posh" factor feels earned by the environment rather than just the price tag.
 
