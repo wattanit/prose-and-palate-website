@@ -8,10 +8,11 @@ Prose & Palate is a tactile, lifestyle-focused digital magazine. It bridges the 
 
 A strict pairing of classic elegance and sharp modernism.
 
-* **Brand & Headings:** **Playfair Display** (Serif). Used for the site title, article headlines, oversized drop caps, and stylized pull quotes.
-* **The "Lede" Paragraph:** The entire first paragraph of every review is set in Playfair Display (slightly oversized) to act as a magazine-style standfirst, visually separating the introduction from the body.
-* **Body Text:** A clean, highly legible sans-serif (e.g., **Inter** or **Lato**) for sharp, modern contrast and comfortable long-form reading on digital screens.
+* **Brand & Headings:** **Playfair Display** (Serif), non-italic. Used for the site title, article headlines, oversized drop caps, and stylized pull quotes.
+* **The "Lede" Paragraph:** The entire first paragraph of every review is set in Playfair Display (slightly oversized, italic) to act as a magazine-style standfirst, visually separating the introduction from the body.
+* **Body Text:** A clean, highly legible sans-serif (**Inter**) for sharp, modern contrast and comfortable long-form reading on digital screens.
 * **Hierarchy:** Relies on dramatic contrast in size, weight, and white space rather than underlining or excessive colors.
+* **The Logo:** "Prose & Palate" set in Playfair Display, non-italic, bold. The ampersand (`&`) may carry an accent color (amber) for a subtle brand color play. No icon mark.
 
 ## 3. Color Palette & Textures
 
@@ -29,11 +30,13 @@ Employs an asymmetrical, editorial grid where white space is treated as an activ
 
 ### 4.1 Home / Landing Page
 
-* An editorial landing with a sticky masthead and an issue dateline.
-* A **featured hero** — a large anchor image with a frosted vellum caption block overlapping its bottom edge.
-* An **asymmetrical review grid** of recent reviews, mixing card sizes (lead, wide, narrow, standard) across a 12-column grid for visual rhythm.
-* A centered **quote band** divider between sections.
-* A **categories strip** linking to Bars, Drinks, and Books sections.
+* A **sticky masthead** with the logo, primary navigation, and theme toggle.
+* A **cinematic cover hero** — a full-bleed anchor image (~82vh) with a gradient scrim darkening the bottom. The title (Playfair Display, cream-colored), lede, and meta are overlaid directly at the bottom in a left-aligned block. This represents the latest bar post. A subtle **parallax** effect (CSS `background-attachment: fixed`) gives the image depth as the user scrolls. Because the image is dynamic content (not manually curated like a magazine), the text readability is guaranteed by two layers: a **strong dual-gradient scrim** (dark wash at top + strong ramp at bottom) and **text shadows** on all overlaid text. This ensures legibility regardless of the photo's brightness or composition.
+* **Latest Articles** — an asymmetric editorial split:
+  * **Left column (7fr):** a lead feature with a large image, title, and excerpt (the latest post overall that isn't the cover hero).
+  * **Right column (5fr):** a stacked list of compact entries — each a small thumbnail + eyebrow + title + 2-line excerpt, separated by hairlines. Tags are omitted from the thumbnails; the eyebrow carries the category.
+* **Explore by Subject** — three category cards (Bars, Drinks, Books) with images, descriptions, and "Browse →" links.
+* **The Editorial** — a centered closing statement (italic Playfair Display) attributed to the editors, before the footer.
 
 ### 4.2 Bar & Spirit Reviews (The Digital Spread)
 
@@ -66,6 +69,24 @@ Utilizes a structured, split-screen dual-column layout.
 * An embedded **rating card** (smaller variant) sits within the anchor column.
 * The **review text** scrolls on the other side (right), using the same typographic treatment as the bar reviews: Playfair lede, drop cap, section headings, and pull quotes.
 * On **mobile**, the columns collapse and the cover sits above the review text.
+
+### 4.4 Standard Article Page
+
+For informational content not tied to a review — About pages, policies, editorials, etc.
+
+* A **centered title block** — eyebrow, Playfair headline, italic lede, and a meta row (byline + date) separated by a hairline rule.
+* An **optional hero image** between the title and body, full measure width with a centered caption.
+* A **single reading column** (`~66ch`) for the body, with drop cap on the first paragraph, `h2`/`h3` headings (amber tick marks), magazine-style first-line indents, pull quotes, inline figures, and bullet/numbered lists with amber markers.
+* No rating panels, spreads, or review-specific components — pure reading.
+
+### 4.5 Category Listing Page
+
+For browsing all reviews in a subject (Bars, Drinks, Books). A clean, traditional card grid — no magazine-style layout needed here.
+
+* A **centered header** — eyebrow ("Reviews"), title (e.g. "Bars & Rooms"), and a one-line description.
+* A **responsive card grid** using `auto-fill, minmax(17rem, 1fr)`, so cards flow into as many columns as fit. No fixed column count.
+* Each card: a 4:3 image with category tag, an eyebrow (e.g. location), title, excerpt, and a meta row (read time + date).
+* Cards have a subtle image zoom on hover.
 
 ## 5. Photography & "Aliveness"
 
@@ -119,3 +140,4 @@ Each review opens with a small kicker in the form **`Column · No. N · Category
 * **Scores:** All scores are on a **/10 scale**.
 * **Responsive:** All layouts collapse to single-column stacking on mobile (≤48rem breakpoint).
 * **Reduced motion:** Parallax and transitions are disabled when the user's system prefers reduced motion.
+* **Footer:** Simple copyright line only — "© 2026 Prose & Palate." No decorative colophon text.
