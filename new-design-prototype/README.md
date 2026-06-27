@@ -28,6 +28,19 @@ the Google Fonts and relative asset paths resolve cleanly.)
 
 Body copy is placeholder (lorem-style with a few real sentences) — only the *design* matters here.
 
+### Editorial numbering (`eyebrow` kicker)
+
+Each review opens with a small kicker in the form **`Column · No. N · Category`**, e.g.
+`Review · No. 14 · Bars`, `Tasting · No. 27 · Drinks`, `Review · No. 9 · Books`.
+
+- **Column** = the magazine "column" (article type). `Review` for bars & books, `Tasting` for drinks.
+- **No. N** = a **per-category running counter** (bars, drinks, and books each maintain their own
+  sequence). The numbers shown are placeholders.
+- **Category** = the subject (Bars / Drinks / Books).
+
+In the Astro build this number should be **auto-generated** — derived from the count of published
+reviews of that category that precede the current one — so no hand-numbering is ever needed.
+
 ## File structure
 
 ```
