@@ -37,129 +37,126 @@
       </div>
     </header>
 
-    <!-- Issue dateline -->
-    <div class="dateline">
-      <span>Volume III</span>
-      <span>The Summer Issue</span>
-      <span>Bars · Drinks · Books</span>
-    </div>
-
-    <main class="container">
-      <!-- ============================ HERO FEATURE ============================ -->
-      <section class="hero-feature">
-        <div class="hero-feature__media">
-          <img src="assets/home-feature.jpg" alt="A warmly lit bar interior with bottles backlit on shelves">
-          <span class="tag tag--bars">Bars</span>
-        </div>
-        <div class="hero-feature__caption vellum">
-          <span class="eyebrow">Featured Review · Singapore</span>
-          <h1>The Quiet Geometry of a Perfect Pour</h1>
-          <p class="lede">At Nutmeg &amp; Clove, the cocktail isn't a trick — it's a sentence, punctuated with patience and read aloud, one measure at a time.</p>
-          <div class="meta">
-            <strong>By W. Sinclair</strong>
-            <span class="dot"></span><span>Jun 2026</span>
-            <span class="dot"></span><span>9 min read</span>
+    <main>
+      <!-- ============================ COVER HERO ============================ -->
+      <div class="container">
+        <section class="cover">
+          <img class="cover__img" src="assets/home-feature.jpg" alt="A warmly lit bar interior with bottles backlit on shelves">
+          <div class="cover__scrim"></div>
+          <div class="cover__content">
+            <div class="inner">
+              <span class="eyebrow">The Cover Story</span>
+              <h1>The Quiet Geometry<br>of a Perfect Pour</h1>
+              <p class="lede">At Nutmeg &amp; Clove, the cocktail isn't a trick — it's a sentence, punctuated with patience and read aloud, one measure at a time.</p>
+              <div class="meta">
+                <strong>By W. Sinclair</strong>
+                <span class="dot"></span><span>Jun 2026</span>
+                <span class="dot"></span><span>9 min read</span>
+              </div>
+            </div>
           </div>
-          <p style="margin:1.3rem 0 0"><a href="bar-review.html" class="btn">Read the review <span class="arrow">→</span></a></p>
-        </div>
-      </section>
+        </section>
+      </div>
 
-      <!-- ============================ RECENT REVIEWS ============================ -->
-      <h2 class="section-title">Recent Reviews</h2>
-      <section class="reviews">
-        <!-- Lead wide card -->
-        <article class="card card--lead">
-          <a href="bar-review.html" class="card__media">
-            <img src="assets/bar-hero.jpg" alt="A long, polished bar counter at dusk">
-            <span class="tag tag--bars">Bars</span>
+      <!-- ============================ IN THIS ISSUE ============================ -->
+      <div class="container">
+        <h2 class="section-title">Latest Articles</h2>
+        <section class="issue">
+          <!-- Lead feature -->
+          <article class="issue__lead">
+            <a href="bar-review.html" class="card__media">
+              <img src="assets/bar-hero.jpg" alt="A long, polished bar counter at dusk">
+              <span class="tag tag--bars">Bars</span>
+            </a>
+            <span class="eyebrow">Bars · Singapore</span>
+            <h3 class="card__title">Jigger &amp; Pony, and the Art of Being Remembered</h3>
+            <p class="card__excerpt">There is a particular kind of hospitality that feels less like service and more like being recognised. We spent an evening finding out how they do it — and why the rest of us keep coming back.</p>
+            <div class="meta"><strong>Bars</strong><span class="dot"></span><span>8 min read</span></div>
+            <p style="margin-top:1rem"><a href="bar-review.html" class="read-more">Read the review <span class="arrow">→</span></a></p>
+          </article>
+
+          <!-- Compact entries -->
+          <div class="issue__list">
+            <a href="drink-review.html" class="issue__entry">
+              <div class="card__media">
+                <img src="assets/drink-2.jpg" alt="A neat pour of amber spirit in a heavy glass">
+              </div>
+              <div class="issue__entry-body">
+                <span class="eyebrow">Drinks · Speyside</span>
+                <h4 class="card__title">Notes on a Single Malt</h4>
+                <p class="card__excerpt">Twelve years in a warehouse does something to a spirit that no cleverness can fake.</p>
+              </div>
+            </a>
+
+            <a href="book-review.html" class="issue__entry">
+              <div class="card__media">
+                <img src="assets/book-cover.svg" alt="Book cover for The Lantern in the Hollow">
+              </div>
+              <div class="issue__entry-body">
+                <span class="eyebrow">Books · Fiction</span>
+                <h4 class="card__title">The Lantern in the Hollow</h4>
+                <p class="card__excerpt">Elena Voss writes the way a candle burns in a draught — impossible to look away from.</p>
+              </div>
+            </a>
+
+            <a href="drink-review.html" class="issue__entry">
+              <div class="card__media">
+                <img src="assets/drink-hero.jpg" alt="A dim, moody backlit bar shelf">
+              </div>
+              <div class="issue__entry-body">
+                <span class="eyebrow">Drinks · Cocktails</span>
+                <h4 class="card__title">What a Negroni Knows</h4>
+                <p class="card__excerpt">Three ingredients, infinite argument. A defence of the most stubbornly perfect drink ever poured.</p>
+              </div>
+            </a>
+
+            <a href="bar-review.html" class="issue__entry">
+              <div class="card__media">
+                <img src="assets/home-feature-3.jpg" alt="A moody bar interior">
+              </div>
+              <div class="issue__entry-body">
+                <span class="eyebrow">Bars · Bangkok</span>
+                <h4 class="card__title">Alonetogether, and the Luxury of Solitude</h4>
+                <p class="card__excerpt">A bar designed for one — and the quiet case for drinking alone, well.</p>
+              </div>
+            </a>
+          </div>
+        </section>
+      </div>
+
+      <!-- ============================ EXPLORE BY SUBJECT ============================ -->
+      <div class="container">
+        <h2 class="section-title">Explore by Subject</h2>
+        <section class="reviews" style="margin-top:0">
+          <a href="bar-review.html" class="card card--wide">
+            <div class="card__media"><img src="assets/home-feature-2.jpg" alt="Bar interior"><span class="tag tag--bars">Bars</span></div>
+            <h3 class="card__title">Bars &amp; Rooms</h3>
+            <p class="card__excerpt">The places that earn a second visit — and a third, and a tenth. Hospitality, design, and the small rituals of a regular.</p>
+            <span class="read-more">Browse bars <span class="arrow">→</span></span>
           </a>
-          <h3 class="card__title">Jigger &amp; Pony, and the Art of Being Remembered</h3>
-          <p class="card__excerpt">There is a particular kind of hospitality that feels less like service and more like being recognised. We spent an evening finding out how they do it.</p>
-          <div class="meta"><strong>Bars</strong><span class="dot"></span><span>Singapore</span><span class="dot"></span><span>8 min</span></div>
-        </article>
-
-        <!-- Narrow portrait card -->
-        <article class="card card--narrow">
-          <a href="drink-review.html" class="card__media">
-            <img src="assets/drink-2.jpg" alt="A neat pour of amber spirit in a heavy glass">
-            <span class="tag tag--drinks">Drinks</span>
+          <a href="drink-review.html" class="card">
+            <div class="card__media"><img src="assets/drink-1.jpg" alt="A cocktail"><span class="tag tag--drinks">Drinks</span></div>
+            <h3 class="card__title">Drinks &amp; Spirits</h3>
+            <p class="card__excerpt">Tasting notes, forgotten classics, and the quiet philosophy in a well-made pour.</p>
+            <span class="read-more">Browse drinks <span class="arrow">→</span></span>
           </a>
-          <h3 class="card__title">Notes on a Single Malt</h3>
-          <div class="meta"><strong>Drinks</strong><span class="dot"></span><span>Speyside</span></div>
-        </article>
-
-        <!-- Book card -->
-        <article class="card card--wide">
-          <a href="book-review.html" class="card__media">
-            <img src="assets/book-cover.svg" alt="Book cover for The Lantern in the Hollow by Elena Voss">
-            <span class="tag tag--books">Books</span>
+          <a href="book-review.html" class="card">
+            <div class="card__media"><img src="assets/book-cover.svg" alt="A book cover"><span class="tag tag--books">Books</span></div>
+            <h3 class="card__title">Books &amp; Pages</h3>
+            <p class="card__excerpt">Fiction and essays that reward the reader who refuses to hurry.</p>
+            <span class="read-more">Browse books <span class="arrow">→</span></span>
           </a>
-          <h3 class="card__title">The Lantern in the Hollow — Slow Light, Long Shadows</h3>
-          <p class="card__excerpt">Elena Voss writes the way a candle burns in a draught: unsteady, deliberate, and impossible to look away from.</p>
-          <div class="meta"><strong>Books</strong><span class="dot"></span><span>Fiction</span><span class="dot"></span><span>11 min</span></div>
-        </article>
+        </section>
+      </div>
 
-        <article class="card">
-          <a href="drink-review.html" class="card__media">
-            <img src="assets/drink-hero.jpg" alt="A dim, moody bar with a glowing backlit shelf">
-            <span class="tag tag--drinks">Drinks</span>
-          </a>
-          <h3 class="card__title">What a Negroni Knows</h3>
-          <p class="card__excerpt">Three ingredients, infinite argument. A defence of the most stubbornly perfect drink ever poured.</p>
-          <div class="meta"><strong>Drinks</strong><span class="dot"></span><span>Cocktails</span></div>
-        </article>
-
-        <article class="card">
-          <a href="bar-review.html" class="card__media">
-            <img src="assets/bar-1.jpg" alt="A close detail of glassware on a bar">
-            <span class="tag tag--bars">Bars</span>
-          </a>
-          <h3 class="card__title">Atlas, and the Cathedral of Ice</h3>
-          <p class="card__excerpt">A tower of gin, a hall of mirrors, and a clockwork trolley. Architecture as aperitif.</p>
-          <div class="meta"><strong>Bars</strong><span class="dot"></span><span>London</span></div>
-        </article>
-
-        <article class="card">
-          <a href="book-review.html" class="card__media">
-            <img src="assets/book-cover.svg" alt="Book cover detail">
-            <span class="tag tag--books">Books</span>
-          </a>
-          <h3 class="card__title">On Reading Slowly Again</h3>
-          <p class="card__excerpt">A small manifesto for the lost art of lingering over a single page until it gives something back.</p>
-          <div class="meta"><strong>Books</strong><span class="dot"></span><span>Essays</span></div>
-        </article>
-      </section>
-
-      <!-- ============================ QUOTE BAND ============================ -->
-      <section class="quote-band">
-        <span class="mark">&ldquo;</span>
-        <blockquote>
-          A good bar, a good drink, a good book — each is just a room with the lights turned low, waiting for you to sit down and stay.
-        </blockquote>
-      </section>
-
-      <!-- ============================ CATEGORIES STRIP ============================ -->
-      <h2 class="section-title" style="margin-top:1rem">Explore by Subject</h2>
-      <section class="reviews" style="margin-top:0">
-        <a href="bar-review.html" class="card card--wide">
-          <div class="card__media"><img src="assets/home-feature-2.jpg" alt="Bar interior"><span class="tag tag--bars">Bars</span></div>
-          <h3 class="card__title">Bars &amp; Rooms</h3>
-          <p class="card__excerpt">The places that earn a second visit — and a third, and a tenth. Hospitality, design, and the small rituals of a regular.</p>
-          <span class="read-more">Browse bars <span class="arrow">→</span></span>
-        </a>
-        <a href="drink-review.html" class="card">
-          <div class="card__media"><img src="assets/drink-1.jpg" alt="A cocktail"><span class="tag tag--drinks">Drinks</span></div>
-          <h3 class="card__title">Drinks &amp; Spirits</h3>
-          <p class="card__excerpt">Tasting notes, forgotten classics, and the quiet philosophy in a well-made pour.</p>
-          <span class="read-more">Browse drinks <span class="arrow">→</span></span>
-        </a>
-        <a href="book-review.html" class="card">
-          <div class="card__media"><img src="assets/book-cover.svg" alt="A book cover"><span class="tag tag--books">Books</span></div>
-          <h3 class="card__title">Books &amp; Pages</h3>
-          <p class="card__excerpt">Fiction and essays that reward the reader who refuses to hurry.</p>
-          <span class="read-more">Browse books <span class="arrow">→</span></span>
-        </a>
-      </section>
+      <!-- ============================ MASTHEAD STATEMENT ============================ -->
+      <div class="container">
+        <section class="statement">
+          <span class="eyebrow">The Editorial</span>
+          <p>A good bar, a good drink, a good book — each is just a room with the lights turned low, waiting for you to sit down and stay.</p>
+          <div class="sig">— The Editors, Prose &amp; Palate</div>
+        </section>
+      </div>
     </main>
 
     <!-- ============================ FOOTER ============================ -->
