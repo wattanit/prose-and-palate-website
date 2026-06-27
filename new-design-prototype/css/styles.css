@@ -635,6 +635,98 @@ body:has(.theme-toggle:focus-visible) .toggle-pill { outline: 2px solid var(--am
 /* Quote band divider (kept for potential reuse) */
 
 /* ----------------------------------------------------------------------------
+   9d. Standard article page (informational, non-review)
+   ---------------------------------------------------------------------------- */
+.std-article {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-block: clamp(2.5rem, 6vw, 4rem);
+}
+/* Title block */
+.std-article__head {
+  text-align: center;
+  margin-bottom: clamp(2rem, 5vw, 3rem);
+}
+.std-article__head h1 {
+  font-size: clamp(2rem, 1.4rem + 3vw, 3.4rem);
+  line-height: 1.04;
+  margin: 0.5rem 0 1.2rem;
+}
+.std-article__head .lede {
+  max-width: 44ch;
+  margin-inline: auto;
+}
+.std-article__head .meta {
+  justify-content: center;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+
+/* Optional hero image below the title */
+.std-article__hero {
+  margin: clamp(1.5rem, 4vw, 2.5rem) 0 clamp(2rem, 5vw, 3rem);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.std-article__hero img { width: 100%; filter: saturate(1.03) contrast(1.04); }
+.std-article__hero figcaption {
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+  font-style: italic;
+  margin-top: 0.6rem;
+  text-align: center;
+}
+
+/* Body prose */
+.std-article__body h2 {
+  font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.1rem);
+  margin: clamp(2rem, 4vw, 2.8rem) 0 0.9rem;
+}
+.std-article__body h2::before {
+  content: ""; display: block;
+  width: 2.5rem; height: 2px;
+  background: var(--amber);
+  margin-bottom: 0.9rem;
+}
+.std-article__body h3 {
+  font-size: 1.25rem;
+  margin: 1.8rem 0 0.6rem;
+}
+.std-article__body p { margin: 0 0 1.2em; }
+.std-article__body p + p { text-indent: 1.6em; }
+.std-article__body p.dropcap + p,
+.std-article__body h2 + p,
+.std-article__body h3 + p,
+.std-article__body .pullquote + p,
+.std-article__body figure + p { text-indent: 0; }
+
+/* Inline figure (centered, full measure width) */
+.std-article__body figure {
+  margin: clamp(1.8rem, 4vw, 2.5rem) 0;
+}
+.std-article__body figure img {
+  border-radius: var(--radius);
+  filter: saturate(1.03) contrast(1.04);
+}
+.std-article__body figcaption {
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+  font-style: italic;
+  margin-top: 0.6rem;
+  text-align: center;
+}
+
+/* Bullet / numbered lists */
+.std-article__body ul,
+.std-article__body ol {
+  margin: 0 0 1.2em;
+  padding-left: 1.4rem;
+}
+.std-article__body li { margin-bottom: 0.4em; }
+.std-article__body li::marker { color: var(--amber); }
+
+/* ----------------------------------------------------------------------------
    10. Spread layout (Bars & Spirits)
    ---------------------------------------------------------------------------- */
 .spread {
