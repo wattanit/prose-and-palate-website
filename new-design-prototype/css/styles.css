@@ -592,7 +592,7 @@ body:has(.theme-toggle:focus-visible) .toggle-pill { outline: 2px solid var(--am
 
 /* Article body */
 .article {
-  max-width: var(--measure);
+  max-width: 60rem;
   margin-inline: auto;
   padding-block: clamp(2.5rem, 6vw, 4.5rem);
 }
@@ -602,7 +602,7 @@ body:has(.theme-toggle:focus-visible) .toggle-pill { outline: 2px solid var(--am
 }
 .article h2 {
   font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.3rem);
-  margin: 2.4rem 0 0.9rem;
+  margin: 0 0 0.9rem;
 }
 .article h2::before {
   content: ""; display: block;
@@ -611,39 +611,63 @@ body:has(.theme-toggle:focus-visible) .toggle-pill { outline: 2px solid var(--am
   margin-bottom: 1rem;
 }
 .article p { color: var(--ink); }
-.article p + p { text-indent: 1.6em; }
-.article .dropcap + p, .article h2 + p, .article figure + p,
-.article .figure + p, .article .pullquote + p, .article .lede + p { text-indent: 0; }
 
-/* Margin-wrapped figures (text wrapping, pulled into margin) */
+/* Standfirst intro paragraph — full width, centred measure */
+.article > .dropcap {
+  max-width: var(--measure);
+  margin-inline: auto;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+/* ----- Editorial box-based sections -----
+   Each section is an ASYMMETRIC 2-column grid (~42/58 by default). Every
+   paragraph and figure is its own "box" that flows into the grid row-by-row.
+   .section--alt flips the wide/narrow columns per section to avoid symmetry.
+   .section--prose collapses to a single full-width reading column (no photos).
+   On mobile, all boxes stack top-to-bottom in source order. */
+.section {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: clamp(1.5rem, 3vw, 2.5rem) clamp(1.75rem, 4vw, 3rem);
+  align-items: center;
+  margin-bottom: clamp(2.25rem, 5vw, 3.5rem);
+}
+/* Flip the wide/narrow columns on alternate sections */
+.section--alt { grid-template-columns: 7fr 5fr; }
+/* Heading always spans the full width */
+.section > h2 { grid-column: 1 / -1; }
+/* A block that should span both columns (wide image, lead paragraph) */
+.section__wide { grid-column: 1 / -1; }
+/* Paragraph blocks: the grid gap handles spacing */
+.section > p { margin: 0; }
+
+/* Text-only section: single full-width reading column */
+.section--prose { display: block; max-width: var(--measure); }
+.section--prose p { margin: 0 0 1.15em; }
+.section--prose p:last-child { margin-bottom: 0; }
+
+/* ----- Figures (each is its own box) ----- */
 .figure {
   display: block;
-  margin: 1.5rem 0;
+  margin: 0;
 }
+.figure > a { display: block; }
 .figure img {
+  width: auto;
+  max-width: 100%;
+  max-height: 22rem;
+  margin-inline: auto;
   border-radius: var(--radius);
   filter: saturate(1.03) contrast(1.04);
 }
-.figure--left {
-  float: left;
-  width: 16rem;
-  max-width: 42%;
-  margin: 0.4rem 1.8rem 0.6rem -2rem;
-  shape-outside: margin-box;
-}
-.figure--right {
-  float: right;
-  width: 16rem;
-  max-width: 42%;
-  margin: 0.4rem -2rem 0.6rem 1.8rem;
-  shape-outside: margin-box;
-}
 .figure figcaption {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--ink-faint);
-  margin-top: 0.5rem;
+  margin-top: 0.6rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--rule-soft);
   font-style: italic;
-  line-height: 1.4;
+  line-height: 1.45;
 }
 .figure--clickable { cursor: zoom-in; }
 
@@ -676,44 +700,160 @@ body:has(.theme-toggle:focus-visible) .toggle-pill { outline: 2px solid var(--am
 .toc a:first-of-type { border-top: 0; }
 .toc a:hover { color: var(--amber-deep); text-decoration: none; }
 
-/* Rating summary card (end of article) */
-.verdict {
+/* ----------------------------------------------------------------------------
+   10b. Rating panel & info card
+   ---------------------------------------------------------------------------- */
+
+/* The two-column rating breakdown */
+.ratings {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: clamp(1.4rem, 3vw, 2.4rem);
-  align-items: center;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
   padding: clamp(1.6rem, 3vw, 2.4rem);
   border-radius: var(--radius);
-  margin: 3rem 0;
+  margin: 3rem 0 0;
 }
-.score {
+.ratings__block { display: flex; flex-direction: column; }
+.ratings__block-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 2px solid var(--ink);
+}
+.ratings__block-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--ink);
+}
+.ratings__block-overall {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(3rem, 2rem + 4vw, 5rem);
+  font-size: clamp(2.4rem, 1.6rem + 2.5vw, 3.4rem);
   line-height: 1;
   color: var(--amber-deep);
+  white-space: nowrap;
 }
-.score small {
-  display: block;
-  font-family: var(--font-body);
-  font-style: normal;
-  font-weight: 600;
-  font-size: 0.64rem;
-  letter-spacing: 0.24em;
+.ratings__block-overall .denom {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--ink-faint);
+}
+.ratings__summary {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.98rem;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  margin: 0.7rem 0 1rem;
+}
+
+/* Criteria list */
+.criteria { list-style: none; padding: 0; margin: 0; }
+.criterion {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.3rem 0.8rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.criterion:last-child { border-bottom: 0; }
+.criterion__label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--ink-faint);
-  margin-top: 0.4rem;
+  grid-column: 1;
+  grid-row: 1;
 }
-.verdict dl { margin: 0; display: grid; gap: 0.5rem; }
-.verdict dt {
-  font-size: 0.66rem; font-weight: 700; letter-spacing: 0.18em;
-  text-transform: uppercase; color: var(--ink-faint);
+.criterion__score {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--amber);
+  grid-column: 2;
+  grid-row: 1;
+  text-align: right;
+  line-height: 1;
 }
-.verdict dd { margin: 0 0 0.4rem; font-weight: 600; color: var(--ink); }
+.criterion__score .denom { font-size: 0.7rem; font-weight: 500; color: var(--ink-faint); }
+.criterion__note {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
 
-/* stars */
-.stars { color: var(--amber); letter-spacing: 0.15em; font-size: 1.1rem; }
-.stars .empty { color: var(--rule); }
+/* Info card (end of review) */
+.info-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  padding: clamp(1.6rem, 3vw, 2.4rem);
+  border-radius: var(--radius);
+  margin: 1.5rem 0 0;
+}
+.info-card__head { margin-bottom: 0.2rem; }
+.info-card__head h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.4rem, 1.1rem + 1vw, 1.9rem);
+  margin: 0;
+}
+.info-list { display: grid; gap: 0.85rem; }
+.info-list > div {
+  padding-bottom: 0.8rem;
+  border-bottom: 1px dashed var(--rule);
+}
+.info-list > div:last-child { border-bottom: 0; padding-bottom: 0; }
+.info-list dt {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 0.25rem;
+}
+.info-list dd { margin: 0; font-size: 0.95rem; color: var(--ink); line-height: 1.5; }
+.info-card__map {
+  background: var(--paper-3);
+  border-radius: var(--radius);
+  border: 1px solid var(--rule);
+  min-height: 12rem;
+  display: grid;
+  place-items: center;
+  color: var(--ink-faint);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background-image:
+    linear-gradient(rgba(169,118,44,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(169,118,44,0.06) 1px, transparent 1px);
+  background-size: 1.8rem 1.8rem;
+}
+
+/* Hashtags */
+.hashtags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 2rem 0 0;
+  justify-content: center;
+}
+.hashtag {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--amber-deep);
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  background: var(--vellum-bg-2);
+}
 
 /* ----------------------------------------------------------------------------
    11. Book review — split / dual column layout
@@ -882,8 +1022,16 @@ body:has(.theme-toggle:focus-visible) .toggle-pill { outline: 2px solid var(--am
   .verdict { grid-template-columns: 1fr; text-align: center; }
   .verdict dl { text-align: left; }
 
+  .ratings { grid-template-columns: 1fr; }
+  .info-card { grid-template-columns: 1fr; }
+
   .footer-grid { grid-template-columns: 1fr; }
-  .figure--left, .figure--right { float: none; width: 100%; max-width: 100%; margin: 1.6rem 0; }
+}
+
+@media (max-width: 48rem) {
+  .section { grid-template-columns: 1fr; gap: 1.5rem; }
+  .section > p { margin: 0 0 1.1em; }
+  .section > p:last-child { margin-bottom: 0; }
 }
 
 @media (max-width: 30rem) {

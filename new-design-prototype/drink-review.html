@@ -71,41 +71,99 @@
       <article class="article">
         <p class="dropcap">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet arcu non lacus ultricies hendrerit. Quisque vehicula, odio at vehicula luctus, libero purus suscipit nisl, eget malesuada lacus erat at metus. A good whisky, the distiller likes to say, is not made so much as allowed.</p>
 
-        <h2 id="sec-1">Appearance</h2>
-        <p><a href="#lb-1" class="figure figure--left figure--clickable" title="Open image">
-          <img src="assets/drink-1.jpg" alt="A pour of amber whisky catching low light">
-          <figcaption>Held to the window, the spirit runs the colour of late autumn — old gold with a greenish rim.</figcaption>
-        </a>
-        Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. The legs, when the glass is rolled, fall slowly and far apart — a sureness of body that twelve quiet years will buy you.</p>
+        <section class="section" id="sec-1">
+          <h2>Appearance</h2>
+          <figure class="figure figure--clickable">
+            <a href="#lb-1"><img src="assets/drink-1.jpg" alt="A pour of amber whisky catching low light"></a>
+            <figcaption>Held to the window, the spirit runs the colour of late autumn — old gold with a greenish rim.</figcaption>
+          </figure>
+          <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. The legs, when the glass is rolled, fall slowly and far apart — a sureness of body that twelve quiet years will buy you.</p>
+        </section>
 
-        <h2 id="sec-2">Nose</h2>
-        <p>Curabitur pretium tincidunt lacus. Nullam tristique urna at turpis posuere, nec tincidunt turpis suscipit. Donec euismod, nisl eget consectetur sagittis. First: honey on warm wood, then something orchard — pear skin, the faintest bruised apple. Beneath it, a thread of smoke so fine you could mistake it for memory.</p>
+        <section class="section--prose" id="sec-2">
+          <h2>Nose</h2>
+          <p>Curabitur pretium tincidunt lacus. Nullam tristique urna at turpis posuere, nec tincidunt turpis suscipit. Donec euismod, nisl eget consectetur sagittis. First: honey on warm wood, then something orchard — pear skin, the faintest bruised apple. Beneath it, a thread of smoke so fine you could mistake it for memory.</p>
+        </section>
 
         <blockquote class="pullquote">
           &ldquo;It does not announce itself. It simply clears its throat, and waits for you to lean in.&rdquo;
           <cite>— On the nose</cite>
         </blockquote>
 
-        <h2 id="sec-3">Palate</h2>
-        <p><a href="#lb-2" class="figure figure--right figure--clickable" title="Open image">
-          <img src="assets/drink-2.jpg" alt="A neat measure of amber spirit in a heavy tulip glass">
-          <figcaption>A measured pour, neat, in heavy glass — the only honest way to listen.</figcaption>
-        </a>
-        Vivamus vestibulum ligula in nisi suscipit. Donec at lorem vel sapien iaculis porttitor. Aliquam erat volutpat. The arrival is softer than the nose promises: vanilla, then toasted hazelnut, then a slow turn toward dried fig. It warms without burning, the way a room does when someone has just left a fire going.</p>
-
-        <h2 id="sec-4">Finish</h2>
-        <p>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh. Aenean lacinia bibendum nulla sed consectetur. The finish is long and gentle and faintly spiced — clove, perhaps, and the ghost of orange peel — and it leaves you, ten minutes later, still turning the last note over.</p>
-
-        <!-- ============================ VERDICT ============================ -->
-        <section id="verdict" class="verdict vellum">
-          <div class="score">8.7<small>out of 10</small></div>
-          <dl>
-            <div><dt>Complexity</dt><dd><span class="stars">★★★★★</span></dd></div>
-            <div><dt>Balance</dt><dd><span class="stars">★★★★★</span></dd></div>
-            <div><dt>Finish</dt><dd><span class="stars">★★★★<span class="empty">★</span></span></dd></div>
-            <div><dt>Value</dt><dd><span class="stars">★★★★<span class="empty">★</span></span></dd></div>
-          </dl>
+        <section class="section section--alt" id="sec-3">
+          <h2>Palate</h2>
+          <p>Vivamus vestibulum ligula in nisi suscipit. Donec at lorem vel sapien iaculis porttitor. Aliquam erat volutpat. The arrival is softer than the nose promises: vanilla, then toasted hazelnut, then a slow turn toward dried fig. It warms without burning, the way a room does when someone has just left a fire going.</p>
+          <figure class="figure figure--clickable">
+            <a href="#lb-2"><img src="assets/drink-2.jpg" alt="A neat measure of amber spirit in a heavy tulip glass"></a>
+            <figcaption>A measured pour, neat, in heavy glass — the only honest way to listen.</figcaption>
+          </figure>
         </section>
+
+        <section class="section--prose" id="sec-4">
+          <h2>Finish</h2>
+          <p>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh. Aenean lacinia bibendum nulla sed consectetur. The finish is long and gentle and faintly spiced — clove, perhaps, and the ghost of orange peel — and it leaves you, ten minutes later, still turning the last note over.</p>
+        </section>
+
+        <!-- ============================ RATINGS ============================ -->
+        <section id="verdict" class="ratings vellum" style="grid-template-columns:1fr">
+          <div class="ratings__block">
+            <div class="ratings__block-head">
+              <span class="ratings__block-title">Spirit</span>
+              <span class="ratings__block-overall">9.0<span class="denom">/10</span></span>
+            </div>
+            <p class="ratings__summary">A masterclass in patience — twelve years that taught a spirit to speak softly and at length.</p>
+            <ul class="criteria">
+              <li class="criterion">
+                <span class="criterion__label">Complexity</span>
+                <span class="criterion__score">10<span class="denom">/10</span></span>
+                <p class="criterion__note">Layer after layer unfolds — honey, orchard fruit, toasted nut, spice — each revealing itself only to the attentive.</p>
+              </li>
+              <li class="criterion">
+                <span class="criterion__label">Balance</span>
+                <span class="criterion__score">10<span class="denom">/10</span></span>
+                <p class="criterion__note">Nothing dominates; sweetness, oak, and spirit are held in perfect, unhurried equilibrium.</p>
+              </li>
+              <li class="criterion">
+                <span class="criterion__label">Finish</span>
+                <span class="criterion__score">8<span class="denom">/10</span></span>
+                <p class="criterion__note">Long, gentle, faintly spiced — clove and orange peel — lingering ten minutes after the last sip.</p>
+              </li>
+              <li class="criterion">
+                <span class="criterion__label">Value</span>
+                <span class="criterion__score">8<span class="denom">/10</span></span>
+                <p class="criterion__note">Priced honestly for a 12-year Speysider of this calibre; not cheap, but worth every quiet dram.</p>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- ============================ INFO CARD ============================ -->
+        <section class="info-card vellum">
+          <div>
+            <div class="info-card__head">
+              <span class="eyebrow">The Details</span>
+              <h3>Speyside 12-Year Single Malt</h3>
+            </div>
+            <dl class="info-list">
+              <div><dt>Distillery</dt><dd>Speyside, Scottish Highlands</dd></div>
+              <div><dt>Age</dt><dd>12 Years</dd></div>
+              <div><dt>ABV</dt><dd>43%</dd></div>
+              <div><dt>Price Range</dt><dd>฿฿฿ — Mid-premium; fair for a well-aged single malt</dd></div>
+              <div><dt>Best Enjoyed</dt><dd>Neat, in a tulip glass, with nowhere to be afterwards.</dd></div>
+            </dl>
+          </div>
+          <div class="info-card__map">Distillery location</div>
+        </section>
+
+        <!-- ============================ HASHTAGS ============================ -->
+        <div class="hashtags">
+          <span class="hashtag">#whisky</span>
+          <span class="hashtag">#singlemalt</span>
+          <span class="hashtag">#speyside</span>
+          <span class="hashtag">#scotch</span>
+          <span class="hashtag">#spirits</span>
+          <span class="hashtag">#tasting</span>
+        </div>
 
         <hr class="rule">
         <p style="text-align:center; margin-top:2rem">
