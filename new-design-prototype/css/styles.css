@@ -451,7 +451,10 @@ body:has(.theme-toggle:focus-visible) .toggle-pill { outline: 2px solid var(--am
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   filter: saturate(1.04) contrast(1.06);
   z-index: 0;
 }
@@ -459,13 +462,9 @@ body:has(.theme-toggle:focus-visible) .toggle-pill { outline: 2px solid var(--am
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(
-    180deg,
-    rgba(20,14,6,0.25) 0%,
-    rgba(20,14,6,0) 30%,
-    rgba(20,14,6,0) 45%,
-    rgba(20,14,6,0.75) 100%
-  );
+  background:
+    linear-gradient(180deg, rgba(15,10,4,0.4) 0%, rgba(15,10,4,0.15) 25%),
+    linear-gradient(180deg, rgba(15,10,4,0) 40%, rgba(15,10,4,0.6) 65%, rgba(15,10,4,0.85) 100%);
 }
 .cover__content {
   position: relative;
@@ -477,23 +476,27 @@ body:has(.theme-toggle:focus-visible) .toggle-pill { outline: 2px solid var(--am
 .cover .eyebrow {
   color: var(--amber-soft);
   margin-bottom: 0.8rem;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.5);
 }
 .cover h1 {
   font-size: clamp(2.4rem, 1.4rem + 5vw, 5rem);
   line-height: 0.98;
   margin: 0 0 1rem;
   color: #f4efe3;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.5);
 }
 .cover .lede {
   color: rgba(244, 239, 227, 0.88);
   font-size: clamp(1.1rem, 0.95rem + 0.7vw, 1.4rem);
   max-width: 38ch;
+  text-shadow: 0 1px 12px rgba(0,0,0,0.4);
 }
 .cover .meta {
   margin-top: 1.4rem;
-  color: rgba(244, 239, 227, 0.6);
+  color: rgba(244, 239, 227, 0.7);
+  text-shadow: 0 1px 8px rgba(0,0,0,0.4);
 }
-.cover .meta strong { color: rgba(244, 239, 227, 0.85); }
+.cover .meta strong { color: rgba(244, 239, 227, 0.9); }
 
 /* ----------------------------------------------------------------------------
    9b. Home — "In This Issue" editorial listing
@@ -1258,6 +1261,7 @@ body:has(.theme-toggle:focus-visible) .toggle-pill { outline: 2px solid var(--am
 
   .spread__hero { aspect-ratio: 4 / 5; min-height: 0; }
   .spread__hero-img { background-attachment: scroll; }
+  .cover__img { background-attachment: scroll; }
   .spread__title-block { margin-top: -5rem; }
 
   .split { grid-template-columns: 1fr; }
@@ -1292,5 +1296,6 @@ body:has(.theme-toggle:focus-visible) .toggle-pill { outline: 2px solid var(--am
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .spread__hero-img { background-attachment: scroll; }
+  .cover__img { background-attachment: scroll; }
   * { transition: none !important; }
 }
