@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prose &amp; Palate — Reviews on Bars, Drinks &amp; Books</title>
+  <meta name="description" content="Prose & Palate — a slow, tactile digital magazine reviewing the bars, drinks and books worth slowing down for.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="substrate">
+  <input type="checkbox" id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+
+  <div class="site">
+    <!-- ============================ MASTHEAD ============================ -->
+    <header class="masthead">
+      <div class="masthead__inner">
+        <a href="index.html" class="brand">
+          Prose <span class="amp">&amp;</span> Palate
+          <small>Est. MMXXV</small>
+        </a>
+        <nav class="nav" aria-label="Primary">
+          <a href="index.html" class="is-active">Home</a>
+          <a href="bar-review.html">Bars</a>
+          <a href="drink-review.html">Drinks</a>
+          <a href="book-review.html">Books</a>
+          <a href="#">About</a>
+        </nav>
+        <label for="theme-toggle" class="toggle-pill" title="Toggle dark mode">
+          <svg class="icon sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <svg class="icon moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        </label>
+      </div>
+    </header>
+
+    <!-- Issue dateline -->
+    <div class="dateline">
+      <span>Volume III</span>
+      <span>The Summer Issue</span>
+      <span>Bars · Drinks · Books</span>
+    </div>
+
+    <main class="container">
+      <!-- ============================ HERO FEATURE ============================ -->
+      <section class="hero-feature">
+        <div class="hero-feature__media">
+          <img src="assets/home-feature.jpg" alt="A warmly lit bar interior with bottles backlit on shelves">
+          <span class="tag tag--bars">Bars</span>
+        </div>
+        <div class="hero-feature__caption vellum">
+          <span class="eyebrow">Featured Review · Singapore</span>
+          <h1>The Quiet Geometry of a Perfect Pour</h1>
+          <p class="lede">At Nutmeg &amp; Clove, the cocktail isn't a trick — it's a sentence, punctuated with patience and read aloud, one measure at a time.</p>
+          <div class="meta">
+            <strong>By W. Sinclair</strong>
+            <span class="dot"></span><span>Jun 2026</span>
+            <span class="dot"></span><span>9 min read</span>
+          </div>
+          <p style="margin:1.3rem 0 0"><a href="bar-review.html" class="btn">Read the review <span class="arrow">→</span></a></p>
+        </div>
+      </section>
+
+      <!-- ============================ RECENT REVIEWS ============================ -->
+      <h2 class="section-title">Recent Reviews</h2>
+      <section class="reviews">
+        <!-- Lead wide card -->
+        <article class="card card--lead">
+          <a href="bar-review.html" class="card__media">
+            <img src="assets/bar-hero.jpg" alt="A long, polished bar counter at dusk">
+            <span class="tag tag--bars">Bars</span>
+          </a>
+          <h3 class="card__title">Jigger &amp; Pony, and the Art of Being Remembered</h3>
+          <p class="card__excerpt">There is a particular kind of hospitality that feels less like service and more like being recognised. We spent an evening finding out how they do it.</p>
+          <div class="meta"><strong>Bars</strong><span class="dot"></span><span>Singapore</span><span class="dot"></span><span>8 min</span></div>
+        </article>
+
+        <!-- Narrow portrait card -->
+        <article class="card card--narrow">
+          <a href="drink-review.html" class="card__media">
+            <img src="assets/drink-2.jpg" alt="A neat pour of amber spirit in a heavy glass">
+            <span class="tag tag--drinks">Drinks</span>
+          </a>
+          <h3 class="card__title">Notes on a Single Malt</h3>
+          <div class="meta"><strong>Drinks</strong><span class="dot"></span><span>Speyside</span></div>
+        </article>
+
+        <!-- Book card -->
+        <article class="card card--wide">
+          <a href="book-review.html" class="card__media">
+            <img src="assets/book-cover.svg" alt="Book cover for The Lantern in the Hollow by Elena Voss">
+            <span class="tag tag--books">Books</span>
+          </a>
+          <h3 class="card__title">The Lantern in the Hollow — Slow Light, Long Shadows</h3>
+          <p class="card__excerpt">Elena Voss writes the way a candle burns in a draught: unsteady, deliberate, and impossible to look away from.</p>
+          <div class="meta"><strong>Books</strong><span class="dot"></span><span>Fiction</span><span class="dot"></span><span>11 min</span></div>
+        </article>
+
+        <article class="card">
+          <a href="drink-review.html" class="card__media">
+            <img src="assets/drink-hero.jpg" alt="A dim, moody bar with a glowing backlit shelf">
+            <span class="tag tag--drinks">Drinks</span>
+          </a>
+          <h3 class="card__title">What a Negroni Knows</h3>
+          <p class="card__excerpt">Three ingredients, infinite argument. A defence of the most stubbornly perfect drink ever poured.</p>
+          <div class="meta"><strong>Drinks</strong><span class="dot"></span><span>Cocktails</span></div>
+        </article>
+
+        <article class="card">
+          <a href="bar-review.html" class="card__media">
+            <img src="assets/bar-1.jpg" alt="A close detail of glassware on a bar">
+            <span class="tag tag--bars">Bars</span>
+          </a>
+          <h3 class="card__title">Atlas, and the Cathedral of Ice</h3>
+          <p class="card__excerpt">A tower of gin, a hall of mirrors, and a clockwork trolley. Architecture as aperitif.</p>
+          <div class="meta"><strong>Bars</strong><span class="dot"></span><span>London</span></div>
+        </article>
+
+        <article class="card">
+          <a href="book-review.html" class="card__media">
+            <img src="assets/book-cover.svg" alt="Book cover detail">
+            <span class="tag tag--books">Books</span>
+          </a>
+          <h3 class="card__title">On Reading Slowly Again</h3>
+          <p class="card__excerpt">A small manifesto for the lost art of lingering over a single page until it gives something back.</p>
+          <div class="meta"><strong>Books</strong><span class="dot"></span><span>Essays</span></div>
+        </article>
+      </section>
+
+      <!-- ============================ QUOTE BAND ============================ -->
+      <section class="quote-band">
+        <span class="mark">&ldquo;</span>
+        <blockquote>
+          A good bar, a good drink, a good book — each is just a room with the lights turned low, waiting for you to sit down and stay.
+        </blockquote>
+      </section>
+
+      <!-- ============================ CATEGORIES STRIP ============================ -->
+      <h2 class="section-title" style="margin-top:1rem">Explore by Subject</h2>
+      <section class="reviews" style="margin-top:0">
+        <a href="bar-review.html" class="card card--wide">
+          <div class="card__media"><img src="assets/home-feature-2.jpg" alt="Bar interior"><span class="tag tag--bars">Bars</span></div>
+          <h3 class="card__title">Bars &amp; Rooms</h3>
+          <p class="card__excerpt">The places that earn a second visit — and a third, and a tenth. Hospitality, design, and the small rituals of a regular.</p>
+          <span class="read-more">Browse bars <span class="arrow">→</span></span>
+        </a>
+        <a href="drink-review.html" class="card">
+          <div class="card__media"><img src="assets/drink-1.jpg" alt="A cocktail"><span class="tag tag--drinks">Drinks</span></div>
+          <h3 class="card__title">Drinks &amp; Spirits</h3>
+          <p class="card__excerpt">Tasting notes, forgotten classics, and the quiet philosophy in a well-made pour.</p>
+          <span class="read-more">Browse drinks <span class="arrow">→</span></span>
+        </a>
+        <a href="book-review.html" class="card">
+          <div class="card__media"><img src="assets/book-cover.svg" alt="A book cover"><span class="tag tag--books">Books</span></div>
+          <h3 class="card__title">Books &amp; Pages</h3>
+          <p class="card__excerpt">Fiction and essays that reward the reader who refuses to hurry.</p>
+          <span class="read-more">Browse books <span class="arrow">→</span></span>
+        </a>
+      </section>
+    </main>
+
+    <!-- ============================ FOOTER ============================ -->
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div>
+            <div class="brand">Prose <span class="amp">&amp;</span> Palate</div>
+            <p style="max-width:34ch; color:var(--ink-soft)">A tactile digital magazine for the people who would rather have one good drink, in one good room, with one good book.</p>
+          </div>
+          <div>
+            <h4>Subjects</h4>
+            <ul>
+              <li><a href="bar-review.html">Bars</a></li>
+              <li><a href="drink-review.html">Drinks</a></li>
+              <li><a href="book-review.html">Books</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>The Magazine</h4>
+            <ul>
+              <li><a href="#">About</a></li>
+              <li><a href="#">Newsletter</a></li>
+              <li><a href="#">Archive</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="colophon">
+          <span>© 2026 Prose &amp; Palate. Set in Playfair Display &amp; Inter.</span>
+          <span>Design prototype — HTML &amp; CSS only</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
