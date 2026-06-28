@@ -33,12 +33,22 @@ const hashtags = d.tags.map((t) => "#" + t.replace(/[^a-z0-9]/gi, ""));
   <main class="container spread">
     <section class="spread__hero">
       <div
-        class="spread__hero-img"
+        class={`spread__hero-img${d.hero_image_portrait ? " spread__hero-img--wide" : ""}`}
         style={`background-image:url('${d.hero_image}')`}
         role="img"
         aria-label={d.hero_alt ?? d.title}
       >
       </div>
+      {
+        d.hero_image_portrait && (
+          <div
+            class="spread__hero-img spread__hero-img--portrait"
+            style={`background-image:url('${d.hero_image_portrait}')`}
+            role="img"
+            aria-label={d.hero_alt ?? d.title}
+          />
+        )
+      }
       <div class="spread__hero-overlay">
         <span class={`tag ${cat.tagClass}`}>{cat.label}</span>
         {

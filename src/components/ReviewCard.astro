@@ -12,15 +12,20 @@ interface Props {
 }
 const { entry } = Astro.props;
 const d = entry.data;
-const cat = CATEGORY[collectionOf(entry)];
+const col = collectionOf(entry);
+const cat = CATEGORY[col];
 const eyebrow = d.eyebrow ?? cat.label;
 const read = readingTime(entry.body ?? "");
 const img =
   d.hero_image ?? ("cover_image" in d ? d.cover_image : undefined);
+const isBook = col === "books";
 ---
 
 <a href={reviewHref(entry)} class="cat-card">
-  <div class="cat-card__media">
+  <div
+    class={`cat-card__media${isBook ? " is-book" : ""}`}
+    style={isBook ? `--cover:url('${img}')` : undefined}
+  >
     <img src={img} alt={d.hero_alt ?? d.title} />
     <span class={`tag ${cat.tagClass}`}>{cat.label}</span>
   </div>

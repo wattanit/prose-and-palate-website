@@ -1103,6 +1103,38 @@ body:has(.theme-toggle:focus-visible) .toggle-pill { outline: 2px solid var(--am
 }
 .cat-card .meta { margin-top: auto; }
 
+/* Book covers in cards: keep the 4:3 frame (aligns with other cards) and show
+   the whole cover (contain) floating over a blurred, scaled fill of itself —
+   never cropped. The cover URL is passed in via the `--cover` custom property. */
+.cat-card__media.is-book,
+.card__media.is-book {
+  isolation: isolate;
+}
+.cat-card__media.is-book::before,
+.card__media.is-book::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: var(--cover);
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.2);
+  filter: blur(20px) saturate(1.25);
+}
+.cat-card__media.is-book img,
+.card__media.is-book img {
+  position: relative;
+  z-index: 1;
+  object-fit: contain;
+  padding: 0.5rem 0;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.4));
+}
+.cat-card__media.is-book .tag,
+.card__media.is-book .tag {
+  z-index: 2;
+}
+
 /* ----------------------------------------------------------------------------
    11. Book review — split / dual column layout
    ---------------------------------------------------------------------------- */
@@ -1127,12 +1159,12 @@ body:has(.theme-toggle:focus-visible) .toggle-pill { outline: 2px solid var(--am
   box-shadow:
     0 1px 1px rgba(0,0,0,0.15),
     0 30px 50px -22px rgba(0,0,0,0.5);
-  aspect-ratio: 2 / 3;
   max-width: 20rem;
   margin-inline: auto;
   width: 100%;
 }
-.book-cover img { width: 100%; height: 100%; object-fit: cover; }
+/* Show the whole cover at its natural ratio — never crop. */
+.book-cover img { width: 100%; height: auto; display: block; }
 /* page-edge ridge to mimic a real book */
 .book-cover::after {
   content: "";
@@ -1249,7 +1281,14 @@ body:has(.theme-toggle:focus-visible) .toggle-pill { outline: 2px solid var(--am
 /* ----------------------------------------------------------------------------
    14. Responsive
    ---------------------------------------------------------------------------- */
+/* Art-directed hero: an optional portrait source swaps in on narrow frames.
+   When no portrait source is provided, the single landscape layer has no
+   --wide class and stays visible at every width. */
+.spread__hero-img--portrait, .cover__img--portrait { display: none; }
+
 @media (max-width: 60rem) {
+  .spread__hero-img--wide, .cover__img--wide { display: none; }
+  .spread__hero-img--portrait, .cover__img--portrait { display: block; }
   .dateline span:nth-child(3) { display: none; }
   .masthead__inner { flex-wrap: wrap; }
   .toggle-pill { margin-left: auto; }

@@ -31,11 +31,13 @@ function info(entry: ReviewEntry) {
     tagClass: cat.tagClass,
     eyebrow: d.eyebrow ? `${cat.label} · ${d.eyebrow}` : cat.label,
     img: d.hero_image ?? ("cover_image" in d ? d.cover_image : undefined),
+    imgPortrait: d.hero_image_portrait,
     alt: d.hero_alt ?? d.title,
     title: d.title,
     description: d.description,
     read: readingTime(entry.body ?? ""),
     date: formatShort(d.date),
+    isBook: collectionOf(entry) === "books",
   };
 }
 
@@ -58,6 +60,7 @@ const explore = [
     cta: "Browse bars",
     img: bars[0]?.data.hero_image ?? "/images/site/home-feature-2.jpg",
     wide: true,
+    isBook: false,
   },
   {
     href: "/drinks",
@@ -68,6 +71,7 @@ const explore = [
     cta: "Browse drinks",
     img: drinks[0]?.data.hero_image ?? "/images/site/drink-1.jpg",
     wide: false,
+    isBook: false,
   },
   {
     href: "/books",
@@ -78,6 +82,7 @@ const explore = [
     cta: "Browse books",
     img: booksImg,
     wide: false,
+    isBook: true,
   },
 ];
 ---
@@ -89,11 +94,19 @@ const explore = [
         <div class="container">
           <section class="cover">
             <div
-              class="cover__img"
+              class={`cover__img${coverInfo.imgPortrait ? " cover__img--wide" : ""}`}
               style={`background-image:url('${coverInfo.img}')`}
               role="img"
               aria-label={coverInfo.alt}
             />
+            {coverInfo.imgPortrait && (
+              <div
+                class="cover__img cover__img--portrait"
+                style={`background-image:url('${coverInfo.imgPortrait}')`}
+                role="img"
+                aria-label={coverInfo.alt}
+              />
+            )}
             <div class="cover__scrim" />
             <div class="cover__content">
               <div class="inner">
@@ -126,7 +139,11 @@ const explore = [
           <h2 class="section-title">Latest Articles</h2>
           <section class="issue">
             <article class="issue__lead">
-              <a href={leadInfo.href} class="card__media">
+              <a
+                href={leadInfo.href}
+                class={`card__media${leadInfo.isBook ? " is-book" : ""}`}
+                style={leadInfo.isBook ? `--cover:url('${leadInfo.img}')` : undefined}
+              >
                 <img src={leadInfo.img} alt={leadInfo.alt} />
                 <span class={`tag ${leadInfo.tagClass}`}>{leadInfo.label}</span>
               </a>
@@ -152,7 +169,10 @@ const explore = [
                 const c = info(entry);
                 return (
                   <a href={c.href} class="issue__entry">
-                    <div class="card__media">
+                    <div
+                      class={`card__media${c.isBook ? " is-book" : ""}`}
+                      style={c.isBook ? `--cover:url('${c.img}')` : undefined}
+                    >
                       <img src={c.img} alt={c.alt} />
                     </div>
                     <div class="issue__entry-body">
@@ -177,7 +197,10 @@ const explore = [
         {
           explore.map((e) => (
             <a href={e.href} class={e.wide ? "card card--wide" : "card"}>
-              <div class="card__media">
+              <div
+                class={`card__media${e.isBook ? " is-book" : ""}`}
+                style={e.isBook ? `--cover:url('${e.img}')` : undefined}
+              >
                 <img src={e.img} alt={e.title} />
                 <span class={`tag ${e.tagClass}`}>{e.label}</span>
               </div>

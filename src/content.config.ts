@@ -36,7 +36,8 @@ const reviewBase = {
   author: z.string().default("The Editors"),
   photographer: z.string().optional(),
   draft: z.boolean().default(false),
-  hero_image: z.string(),
+  hero_image: z.string(), // landscape (21:9 desktop band)
+  hero_image_portrait: z.string().optional(), // optional tall crop for narrow/mobile frames
   hero_alt: z.string().optional(),
   eyebrow: z.string().optional(), // hero kicker, e.g. "Singapore · Asia's 50 Best"
   tags: z.array(z.string()).default([]),

@@ -23,7 +23,8 @@ title: "Jigger & Pony"
 description: "One-line standfirst, shown as the lede."
 date: 2026-06-24T21:00:00Z
 author: "Tony Palate"
-hero_image: "/images/posts/.../1.jpg"   # full-bleed hero
+hero_image: "/images/posts/.../1.jpg"   # full-bleed hero (landscape, 21:9 band)
+hero_image_portrait: "/images/posts/.../1-tall.jpg"  # optional; tall crop used on mobile (4:5)
 hero_alt: "…"
 eyebrow: "Singapore · World's 50 Best"   # hero kicker
 tags: ["singapore", "cocktails"]         # rendered as #hashtags
