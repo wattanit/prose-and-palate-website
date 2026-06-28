@@ -3,7 +3,7 @@ export const site = {
   established: "Est. MMXXV",
   description:
     "A slow magazine for bars, drinks, and books worth lingering over.",
-  url: "https://proseandpalate.com",
+  url: "https://www.prosepalate.com",
   copyright: "© 2026 Prose & Palate.",
   footerBlurb:
     "A slow magazine for bars, drinks, and books worth lingering over.",

@@ -1,227 +1,108 @@
-# Website Technical Specifications
+# Website Technical Specification
 
-version 0.3
+version 1.0 — Astro 7 rebuild (new design)
 
-## **Core Framework & Stack**
-- **Framework:** Astro.js (Static Site Generator)
-- **Base Template:** Bookworm Light Astro (MIT License)
-- **CMS:** TinaCMS integration for content management
-- **Styling:** Tailwind CSS (already included in template)
-  - **IMPORTANT Configuration Note:** This project uses a custom Tailwind CSS plugin system, loading plugins (e.g., `src/tailwind-plugin/tw-theme.mjs`) via `@plugin` directives in `src/styles/main.css`. **DO NOT introduce a standard `tailwind.config.js` or `tailwind.config.mjs` file.** Doing so will break the existing theme and dark mode implementation, which relies on CSS variables defined and overridden through this custom plugin structure and direct CSS in `src/styles/base.css`. All theme color definitions and dark mode logic are managed via `src/config/theme.json`, `src/tailwind-plugin/tw-theme.mjs`, and `src/styles/base.css`.
-- **Deployment:** Netlify (pre-configured in template)
+> Supersedes the 0.x spec, which described a Bookworm/Tailwind/TinaCMS build. That stack
+> was removed in the ground-up rebuild. The visual source of truth is the approved prototype
+> in `new-design-prototype/`; the design system was ported verbatim to `src/styles/global.css`.
 
-## **Branding & Visual Identity**
+## Core framework & stack
 
-### **Logo Implementation**
-- **Logo Type:** Text-based logo (no image)
-- **Logo Text:** "Prose & Palate"
-- **Typography:** Uses primary font (Playfair Display)
-- **Styling:** 
-  - Desktop: `text-3xl` (48px)
-  - Mobile: `text-2xl` (32px)
-  - Font weight: Bold (700)
-  - Color: Dark text with primary color hover effect
-  - Letter spacing: Wide tracking for elegance
+- **Framework:** Astro 7 — static site generator (`output: "static"`)
+- **Content authoring:** MDX (`@astrojs/mdx`); plain Markdown for standard pages
+- **Styling:** hand-written CSS only, all in `src/styles/global.css`. **No Tailwind**, no
+  build-time CSS plugins, no `tailwind.config.*`.
+- **CMS:** none. Content is plain files under the root `contents/` folder.
+- **Search / feeds:** Fuse.js (client-side), `@astrojs/rss`, `@astrojs/sitemap`
+- **Deployment:** Netlify, static (`npm run build` → `dist`)
+- **No React.** Interactivity is CSS-only or small vanilla TS islands.
 
-### Colour Palette
-- Primary - Deep Amber : #c87533
-- Primary - Cream : #f7f1e3
-- Primary - Text : #2a3b4c
-- Accent - Copper : #b87333
-- Accent - Sage Green : #7d9178
-- Accent - Burgundy : #722f37
-- White : #fefefe
-- Logo : #6c3f22
+## Branding & visual identity
 
-### **Typography System**
-**Font Pairing:** Sophisticated serif + clean sans-serif combination
+### Logo
+Text-based: "Prose & Palate" in Playfair Display (bold, non-italic); the ampersand carries
+the amber accent. A small "Est. MMXXV" caption sits alongside. No image mark.
 
-#### **Primary Font (Headings): Playfair Display**
-- **Usage:** All headings (H1-H6), logo, display text
-- **Weights:** 400, 500, 600, 700 (regular and italic)
-- **Character:** Elegant serif with high contrast, literary sophistication
-- **Rationale:** Reflects the "Prose" aspect of the brand, adds sophistication for luxury content
+### Colour palette (CSS custom properties — light mode)
+Warm, paper-derived. Defined as tokens at the top of `global.css`; dark mode overrides them
+via `body:has(.theme-toggle:checked)`.
 
-#### **Secondary Font (Body): Open Sans**
-- **Usage:** Body text, navigation, UI elements
-- **Weights:** 300, 400, 500, 600, 700 (regular and italic)
-- **Character:** Clean, highly readable sans-serif
-- **Rationale:** Excellent readability for reviews, modern and minimal aesthetic
+- Paper substrate: `--paper #f4efe3`, `--paper-2 #ece4d2`, `--paper-3 #e4dac4`
+- Ink (text): `--ink #2a2520`, `--ink-soft #58504a`, `--ink-faint #8c8275`
+- Rules: `--rule #d6cbb4`, `--rule-soft #e2d8c4`
+- Amber accent (whiskey/gold): `--amber #a9762c`, `--amber-deep #83591d`, `--amber-soft #c79a4e`
+- Wine accent (cocktail): `--wine #7c2f2f`, `--wine-soft #a14a4a`
+- Vellum (glassmorphism): translucent `--vellum-bg` + `backdrop-filter: blur(16px) saturate(125%)`
 
-#### **Brand Consistency**
-- **Canva Integration:** Matches existing Canva brand kit (Playfair Display + Open Sans)
-- **Cross-platform:** Ensures consistency across website and marketing materials
-- **Accessibility:** High readability contrast between serif headings and sans-serif body
+A fixed SVG `feTurbulence` grain + a soft vignette form the paper-grain substrate behind everything.
 
-### **Navigation Simplification**
-- **Removed:** Contact links from main navigation and footer
-- **Current Structure:**
-  - Main Nav: Home, About, Pages (dropdown)
-  - Footer Nav: About, Elements, Privacy Policy
-- **Rationale:** Streamlined navigation focuses on content discovery
+### Typography
+- **Display (headings, logo, lede, drop caps, pull quotes):** Playfair Display
+- **Body / UI / meta:** Inter
+- Loaded via Google Fonts `<link>` in `BaseLayout`.
 
-## **Major Template Modifications Required**
+### Navigation
+- Masthead: Home · Bars · Drinks · Books · Search, plus the CSS-only dark-mode toggle.
+- Footer: brand + blurb, Subjects (Bars/Drinks/Books), The Magazine (Search, RSS).
+- (An About page exists but is currently `draft`, so its links are omitted until published.)
 
-### **1. Multi-Category Homepage System**
-**Current:** Single blog feed
-**Required:** Category-filtered homepage views
+## Content architecture
 
-- **Default Homepage:** Mixed feed showing latest from all categories
-- **Category Filter System:** Dynamic category filter tabs/buttons based on existing categories
-- **URL Structure:**
-  - `/` - All categories mixed
-  - `/category/[category-name]` - Filtered by specific category (e.g., `/category/bars`, `/category/spirits`, `/category/books`)
-- **Visual Indicators:** Category badges/labels on each post preview
-- **Implementation Note:** Categories should be implemented as a standard taxonomy system. While the business currently focuses on bars, spirits, and books, the system should be flexible to accommodate any categories defined in the CMS.
+All content lives in the root `contents/` folder, separated from `src/`. Collections are
+defined in `src/content.config.ts` and glob-loaded with `base: "./contents/<dir>"`.
 
-### **2. Enhanced Taxonomy System**
-**Flexible category and subcategory system:**
-- **Primary Categories:** Implemented as standard categories (currently: bars, spirits, books)
-- **Sub-categories (tags):** 
-  - Examples for bars: rooftop, cocktail-bar, hotel-bar, local-spot
-  - Examples for spirits: whiskey, gin, rum, vodka
-  - Examples for books: fiction, non-fiction, biography
-- **Rating System:** Configurable rating criteria per category
-- **Implementation Note:** The system should treat all categories equally. The three main categories (bars, spirits, books) are business priorities but should not require special technical implementation.
+| Collection | Folder | Route | Layout |
+|------------|--------|-------|--------|
+| `bars` | `contents/bars` | `/bars/<slug>` | digital spread |
+| `drinks` | `contents/drinks` | `/drinks/<slug>` | digital spread |
+| `books` | `contents/books` | `/books/<slug>` | split / dual-column |
+| `pages` | `contents/pages` | `/<slug>` | standard article |
 
-## **Content Structure Specifications**
+### Flexible review schema
+Reviews are intentionally **not** fixed-field. Key shared fields:
 
-### **Universal Review Post Schema (MDX/Markdown)**
-```yaml
----
-# Basic Meta
-title: "Review Title"
-slug: "review-slug"
-date: 2025-05-28
-author: "Author Name"
-draft: false
+- `title`, `description` (standfirst), `date`, `author`, `hero_image` (+ optional
+  `hero_image_portrait` for mobile art direction), `eyebrow`, `tags`, `draft`
+- `ratings`: an **array of blocks**, each `{ label, overall, summary, criteria[] }` where a
+  criterion is `{ label, score, note }`. All scores are /10. The rating panel adapts: one
+  block renders full-width, two render side-by-side.
+- `info`: an **array** of `{ label, value }` detail pairs (+ optional `map_embed` for
+  bars/drinks; `info` becomes the spec sheet for books).
+- `toc`: optional floating table-of-contents entries.
+- Books add `book_author`, `cover_image`, `review_title`, `stars`.
 
-# Category System (Standard Implementation)
-category: "category-name" # Any category (e.g., bars, spirits, books, etc.)
-subcategory: "subcategory-name" # Optional subcategory/tag
-tags: ["tag1", "tag2", "tag3"]
+Editorial numbering ("Review · No. 14 · Bars" / "Tasting · No. 27 · Drinks") is generated
+automatically from publish order within each collection — never hand-numbered. `draft: true`
+hides an entry from production builds (still visible in `npm run dev`).
 
-# Flexible Ratings System
-ratings:
-  criterion1: 4  # Rating criteria should be configurable per category
-  criterion2: 4
-  criterion3: 4
-  overall: 4
+## Layouts & components
 
-# SEO & Social
-description: "Review description"
-featured_image: "/images/review-main.jpg"
-og_image: "/images/review-og.jpg"
+- **Layouts:** `BaseLayout` (head, fonts, view transitions, no-flash dark-mode script),
+  `SpreadReview` (bars + drinks), `BookReview` (split), `StandardArticle` (pages).
+- **Spread body** is authored in MDX with `<Section variant="default|alt|prose">`,
+  `<Figure>` (pure-CSS `:target` lightbox), and `<PullQuote>`. The body is a box-based
+  asymmetric mosaic; text-only sections collapse to a single reading column.
+- **Components:** `Masthead`, `Footer`, `RatingPanel`, `InfoCard`, `FloatingToc`,
+  `ReviewCard` (category grid + home cards; book covers shown whole over a blurred fill).
 
-# Optional Category-Specific Fields
-price_point: "Price" # Optional, can be used for any category
-location: "Location" # Optional
-additional_info: "Any additional structured data"
----
-```
+## Behaviour & features
 
-**Category-Specific Examples:**
+- **Dark mode:** CSS-only via `body:has(.theme-toggle:checked)`, enhanced with a no-flash
+  inline script + `localStorage` persistence that survives view transitions.
+- **Lightbox:** pure CSS `:target` (no JS).
+- **Parallax:** `background-attachment: fixed` on heroes; disabled on mobile and under
+  `prefers-reduced-motion`.
+- **View transitions:** Astro `<ClientRouter />` for app-like navigation.
+- **Search:** `/search` — a vanilla TS island running Fuse.js over a build-time
+  `/search-index.json`.
+- **Responsive:** breakpoints at 60rem / 48rem / 30rem; all layouts collapse to a single
+  column on mobile; the nav wraps and the toggle stays right-aligned.
 
-**Bar Review Example:**
-```yaml
-category: "bars"
-tags: ["bangkok", "hotel-bar", "premium", "cocktails"]
-ratings:
-  ambience: 4
-  taste: 4
-  service: 4
-  overall: 4
-location: "Bangkok, Thailand"
-```
+## SEO & performance
 
-**Spirit Review Example:**
-```yaml
-category: "spirits"
-tags: ["whiskey", "scottish", "premium"]
-ratings:
-  complexity: 4
-  balance: 4
-  value: 3
-  overall: 4
-price_point: "฿2,500"
-additional_info: "43% ABV, Scotland"
-```
-
-**Book Review Example:**
-```yaml
-category: "books"
-tags: ["fiction", "contemporary"]
-ratings:
-  writing_quality: 4
-  engagement: 5
-  originality: 3
-  overall: 4
-additional_info: "Author Name"
-```
-
-## **TinaCMS Integration Specifications**
-
-### **Content Management Setup**
-- **Infrastructure:** Using TinaCloud 
-- **Admin Interface:** `/admin` route for content editing
-- **Authentication:** GitHub-based authentication
-- **Real-time Editing:** Visual editing for homepage and static pages
-- **Media Management:** Image upload and management for review photos
-
-### **TinaCMS Schema Configuration**
-- **Collections:** Single "posts" collection with category field (not separate collections per category)
-- **Category Management:** Categories managed as standard taxonomy in CMS
-- **Rich Text Editor:** Support for review content with custom components
-- **Flexible Rating System:** Configurable rating input fields that can vary by category
-- **Media Fields:** Multiple image uploads per review
-- **SEO Fields:** Meta description, og:image, etc.
-- **Implementation Note:** Avoid hardcoding specific categories in the CMS schema. Use a flexible approach that allows any categories to be created and managed through the CMS interface.
-
-## **Homepage Layout Specifications**
-
-### **Header Section**
-- **Brand Logo:** "Prose & Palate" with tagline "Bars, Spirits & Books"
-- **Navigation:** Home, About, Contact, Categories dropdown
-- **Search:** FuseJS-powered search (already in template)
-
-### **Dynamic Category Filter Section** (New Addition)
-- **Filter Tabs:** Generated dynamically from existing categories (All | [Category 1] | [Category 2] | etc.)
-- **Active State:** Visual indication of selected category
-- **JavaScript:** Client-side filtering without page reload
-- **URL Updates:** Browser history support for direct category links
-- **Implementation Note:** Category filters should be dynamically generated from the actual categories in use, not hardcoded for specific categories.
-
-### **Post Grid Layout**
-- **Card Design:** Image, title, category badge, rating stars, excerpt
-- **Responsive:** 3 columns desktop, 2 tablet, 1 mobile
-- **Load More:** Pagination or infinite scroll
-- **Star Ratings:** Visual star display (not just numbers)
-
-## **Individual Review Page Enhancements**
-
-### **Review Template Structure**
-- **Hero Section:** Large featured image, title, category, overall rating
-- **Info Sidebar:** Price, location, practical details
-- **Review Content:** Full markdown content with custom components
-- **Rating Breakdown:** Visual rating display per category criteria
-- **Social Share:** Share buttons for Facebook, Instagram, etc.
-- **Related Posts:** Similar category posts
-
-### **Custom Components for Reviews**
-- **Rating Display:** Star rating component
-- **Info Boxes:** Highlight practical information
-- **Image Galleries:** Multiple photos per review
-- **Quote Callouts:** Highlight key review quotes
-
-## **SEO & Performance Specifications**
-
-### **Technical SEO** (Template already includes most)
-- **Meta Tags:** Category-specific meta descriptions
-- **Schema Markup:** Review schema, local business schema for bars
-- **Open Graph:** Category-specific OG images
-- **Sitemap:** Auto-generated including category pages
-
-### **Performance Targets** (Template already optimized)
-- **Core Web Vitals:** Maintain 95+ PageSpeed score
-- **Image Optimization:** WebP format, responsive images
-- **Code Splitting:** Category-specific JavaScript chunks
+- Per-page `<title>`, meta description, canonical, and Open Graph tags (`BaseLayout`).
+- Auto-generated sitemap (`/sitemap-index.xml`); `robots.txt` references it.
+- RSS feed at `/rss.xml` aggregating all published reviews.
+- Static output; images served from `public/images`.
+- Canonical site URL: `https://www.prosepalate.com` (set in `astro.config.mjs` and
+  `src/lib/siteConfig.ts`).

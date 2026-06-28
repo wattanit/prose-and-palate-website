@@ -5,7 +5,7 @@ import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://proseandpalate.com",
+  site: "https://www.prosepalate.com",
   trailingSlash: "never",
   integrations: [mdx(), sitemap()],
   markdown: {
