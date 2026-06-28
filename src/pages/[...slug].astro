@@ -1,0 +1,21 @@
+---
+import { getCollection, render } from "astro:content";
+import StandardArticle from "@/layouts/StandardArticle.astro";
+
+export async function getStaticPaths() {
+  const pages = (await getCollection("pages")).filter((p) =>
+    import.meta.env.PROD ? p.data.draft !== true : true,
+  );
+  return pages.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<StandardArticle entry={entry}>
+  <Content />
+</StandardArticle>

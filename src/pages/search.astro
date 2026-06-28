@@ -1,23 +1,118 @@
 ---
-import Base from "@/layouts/Base.astro";
-import SearchBar from "@/layouts/SearchBar";
-import { getSinglePage } from "@/lib/contentParser.astro";
-
-// Retrieve all articles
-const posts = await getSinglePage("posts");
-
-// List of items to search in
-const searchList = posts.map((item) => ({
-  slug: item.id,
-  data: item.data,
-  content: item.body,
-}));
+import BaseLayout from "@/layouts/BaseLayout.astro";
 ---
 
-<Base title={`Search`}>
-  <section class="section">
-    <div class="container">
-      <SearchBar client:load searchList={searchList} />
+<BaseLayout title="Search" description="Search Prose & Palate reviews.">
+  <main class="container">
+    <header class="cat-header">
+      <span class="eyebrow">Search</span>
+      <h1>Find a Review</h1>
+      <p>Search across every bar, drink and book we've written about.</p>
+    </header>
+
+    <div style="max-width:40rem; margin:0 auto 1.5rem">
+      <input
+        id="q"
+        type="search"
+        placeholder="Search reviews…"
+        autocomplete="off"
+        aria-label="Search reviews"
+        style="width:100%; padding:0.9rem 1.1rem; font-family:var(--font-body); font-size:1rem; color:var(--ink); background:var(--vellum-bg-2); border:1px solid var(--rule); border-radius:var(--radius)"
+      />
     </div>
-  </section>
-</Base>
+    <p
+      id="search-status"
+      class="meta"
+      style="justify-content:center; margin-bottom:2.5rem"
+    >
+    </p>
+
+    <section id="search-results" class="cat-grid"></section>
+  </main>
+</BaseLayout>
+
+<script>
+  import Fuse from "fuse.js";
+
+  type Item = {
+    title: string;
+    excerpt: string;
+    url: string;
+    category: string;
+    tagClass: string;
+    tags: string[];
+    image: string;
+    date: string;
+  };
+
+  const fmt = new Intl.DateTimeFormat("en-GB", {
+    month: "short",
+    year: "numeric",
+  });
+
+  function escape(s: string): string {
+    return s.replace(
+      /[&<>"]/g,
+      (c) =>
+        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c] || c,
+    );
+  }
+
+  function card(it: Item): string {
+    const date = fmt.format(new Date(it.date));
+    const media = it.image
+      ? `<img src="${escape(it.image)}" alt="${escape(it.title)}" />`
+      : "";
+    return `<a href="${escape(it.url)}" class="cat-card">
+      <div class="cat-card__media">${media}<span class="tag ${it.tagClass}">${escape(it.category)}</span></div>
+      <span class="eyebrow">${escape(it.category)}</span>
+      <h3 class="cat-card__title">${escape(it.title)}</h3>
+      <p class="cat-card__excerpt">${escape(it.excerpt)}</p>
+      <div class="meta"><span>${date}</span></div>
+    </a>`;
+  }
+
+  function setup() {
+    const input = document.getElementById("q") as HTMLInputElement | null;
+    const results = document.getElementById("search-results");
+    const status = document.getElementById("search-status");
+    if (!input || !results || !status) return; // not the search page
+
+    let fuse: Fuse<Item> | null = null;
+    let items: Item[] = [];
+
+    const render = (list: Item[]) => {
+      results.innerHTML = list.map(card).join("");
+    };
+
+    const run = () => {
+      const q = input.value.trim();
+      if (!q) {
+        render(items);
+        status.textContent = items.length ? `${items.length} reviews` : "";
+        return;
+      }
+      const found = fuse ? fuse.search(q).map((r) => r.item) : [];
+      render(found);
+      status.textContent = found.length
+        ? `${found.length} result${found.length > 1 ? "s" : ""}`
+        : "No matches — try another word.";
+    };
+
+    fetch("/search-index.json")
+      .then((r) => r.json())
+      .then((data: Item[]) => {
+        items = data;
+        fuse = new Fuse(items, {
+          keys: ["title", "excerpt", "category", "tags"],
+          threshold: 0.4,
+          ignoreLocation: true,
+        });
+        run();
+      });
+
+    input.addEventListener("input", run);
+  }
+
+  document.addEventListener("astro:page-load", setup);
+</script>

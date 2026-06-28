@@ -1,0 +1,57 @@
+---
+interface Criterion {
+  label: string;
+  score: number;
+  note?: string;
+}
+interface Block {
+  label: string;
+  overall: number;
+  summary?: string;
+  criteria: Criterion[];
+}
+interface Props {
+  ratings: Block[];
+  id?: string;
+}
+const { ratings, id = "verdict" } = Astro.props;
+// One block fills the panel full-width; two or more flow into the grid.
+const single = ratings.length === 1;
+---
+
+{
+  ratings.length > 0 && (
+    <section
+      id={id}
+      class="ratings vellum"
+      style={single ? "grid-template-columns:1fr" : undefined}
+    >
+      {ratings.map((block) => (
+        <div class="ratings__block">
+          <div class="ratings__block-head">
+            <span class="ratings__block-title">{block.label}</span>
+            <span class="ratings__block-overall">
+              {block.overall}
+              <span class="denom">/10</span>
+            </span>
+          </div>
+          {block.summary && <p class="ratings__summary">{block.summary}</p>}
+          {block.criteria.length > 0 && (
+            <ul class="criteria">
+              {block.criteria.map((c) => (
+                <li class="criterion">
+                  <span class="criterion__label">{c.label}</span>
+                  <span class="criterion__score">
+                    {c.score}
+                    <span class="denom">/10</span>
+                  </span>
+                  {c.note && <p class="criterion__note">{c.note}</p>}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ))}
+    </section>
+  )
+}

@@ -1,0 +1,96 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { editorialKicker, type ReviewEntry } from "@/lib/reviews";
+import { formatLong, readingTime } from "@/lib/format";
+
+interface Props {
+  entry: ReviewEntry;
+  number: number;
+}
+const { entry, number } = Astro.props;
+const d = entry.data as import("astro:content").CollectionEntry<"books">["data"];
+const kicker = editorialKicker("books", number);
+const read = readingTime(entry.body ?? "");
+const rating = d.ratings[0];
+const fullStars = d.stars ? Math.round(d.stars) : 0;
+---
+
+<BaseLayout
+  title={d.meta_title ?? d.title}
+  description={d.description}
+  image={d.cover_image}
+>
+  <main class="container">
+    <section class="split">
+      <aside class="split__anchor">
+        <figure class="book-cover">
+          <img src={d.cover_image} alt={d.cover_alt ?? `Book cover: ${d.title}`} />
+        </figure>
+
+        <div class="book-spec">
+          <span class="tag tag--books" style="margin-bottom:0.8rem"
+            >{d.eyebrow ?? "Books"}</span
+          >
+          <h1>{d.title}</h1>
+          <p class="author">by {d.book_author}</p>
+
+          {
+            d.info.length > 0 && (
+              <dl class="spec-list">
+                {d.info.map((i) => (
+                  <div>
+                    <dt>{i.label}</dt>
+                    <dd set:html={i.value} />
+                  </div>
+                ))}
+              </dl>
+            )
+          }
+
+          {
+            rating && (
+              <div style="margin-top:1.4rem; padding:1.1rem 1.2rem" class="vellum">
+                <span class="eyebrow">Our rating</span>
+                <div class="score" style="font-size:2.6rem; margin-top:0.3rem">
+                  {rating.overall}
+                  <small style="display:inline; font-size:0.7rem; margin-left:0.3rem">
+                    / 10
+                  </small>
+                </div>
+                {d.stars != null && (
+                  <div class="stars" style="margin-top:0.2rem">
+                    {"★".repeat(fullStars)}
+                    {"☆".repeat(Math.max(0, 5 - fullStars))}
+                  </div>
+                )}
+              </div>
+            )
+          }
+        </div>
+      </aside>
+
+      <div class="split__review article">
+        <span class="eyebrow">{kicker}</span>
+        {
+          d.review_title && (
+            <h1
+              style="font-size:clamp(2.2rem,1.4rem+3.4vw,3.6rem); line-height:1; margin:0.5rem 0 1.4rem"
+              set:html={d.review_title}
+            />
+          )
+        }
+        {d.description && <p class="lede">{d.description}</p>}
+        <div
+          class="meta"
+          style="border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); padding:0.8rem 0; margin-bottom:2rem"
+        >
+          <span>By <strong>{d.author}</strong></span>
+          <span class="dot"></span><span>{formatLong(d.date)}</span>
+          <span class="dot"></span><span>{read}</span>
+        </div>
+
+        <slot />
+      </div>
+    </section>
+  </main>
+</BaseLayout>

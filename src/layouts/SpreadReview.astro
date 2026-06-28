@@ -1,0 +1,101 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import FloatingToc from "@/components/FloatingToc.astro";
+import RatingPanel from "@/components/RatingPanel.astro";
+import InfoCard from "@/components/InfoCard.astro";
+import {
+  CATEGORY,
+  collectionOf,
+  editorialKicker,
+  type ReviewEntry,
+} from "@/lib/reviews";
+import { formatLong, readingTime } from "@/lib/format";
+
+interface Props {
+  entry: ReviewEntry;
+  number: number;
+}
+const { entry, number } = Astro.props;
+const d = entry.data;
+const col = collectionOf(entry);
+const cat = CATEGORY[col];
+const kicker = editorialKicker(col, number);
+const read = readingTime(entry.body ?? "");
+const tocLabel = col === "drinks" ? "Tasting flight" : "In this review";
+const hashtags = d.tags.map((t) => "#" + t.replace(/[^a-z0-9]/gi, ""));
+---
+
+<BaseLayout
+  title={d.meta_title ?? d.title}
+  description={d.description}
+  image={d.hero_image}
+>
+  <main class="container spread">
+    <section class="spread__hero">
+      <div
+        class="spread__hero-img"
+        style={`background-image:url('${d.hero_image}')`}
+        role="img"
+        aria-label={d.hero_alt ?? d.title}
+      >
+      </div>
+      <div class="spread__hero-overlay">
+        <span class={`tag ${cat.tagClass}`}>{cat.label}</span>
+        {
+          d.eyebrow && (
+            <span
+              class="eyebrow"
+              style="color:var(--paper); text-shadow:0 1px 4px rgba(0,0,0,0.4)"
+            >
+              {d.eyebrow}
+            </span>
+          )
+        }
+      </div>
+    </section>
+
+    <div class="spread__title-block vellum">
+      <span class="eyebrow">{kicker}</span>
+      <h1>{d.title}</h1>
+      {d.description && <p class="lede" style="max-width:46ch">{d.description}</p>}
+      <div class="meta">
+        <span>By <strong>{d.author}</strong></span>
+        {
+          d.photographer && (
+            <>
+              <span class="dot" />
+              <span>Photography by {d.photographer}</span>
+            </>
+          )
+        }
+        <span class="dot"></span><span>{formatLong(d.date)}</span>
+        <span class="dot"></span><span>{read}</span>
+      </div>
+    </div>
+
+    <FloatingToc
+      items={d.toc}
+      label={tocLabel}
+      includeVerdict={d.ratings.length > 0}
+    />
+
+    <article class="article">
+      <slot />
+      <RatingPanel ratings={d.ratings} />
+      <InfoCard
+        info={d.info}
+        heading={d.info_heading}
+        mapEmbed={"map_embed" in d ? d.map_embed : undefined}
+      />
+      {
+        hashtags.length > 0 && (
+          <div class="hashtags">
+            {hashtags.map((t) => (
+              <span class="hashtag">{t}</span>
+            ))}
+          </div>
+        )
+      }
+    </article>
+  </main>
+</BaseLayout>

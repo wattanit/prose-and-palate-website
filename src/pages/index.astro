@@ -1,217 +1,206 @@
 ---
-import config from "@/config/config.json";
-import Base from "@/layouts/Base.astro";
-import Pagination from "@/layouts/components/Pagination.astro";
-import Posts from "@/layouts/Posts.astro";
-import { getSinglePage } from "@/lib/contentParser.astro";
-import { getTaxonomy } from "@/lib/taxonomyParser.astro";
-import { sortByDate } from "@/lib/utils/sortFunctions";
-import { humanize } from "@/lib/utils/textConverter";
-import dateFormat from "@/lib/utils/dateFormat";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import {
+  getAllReviews,
+  getReviews,
+  CATEGORY,
+  reviewHref,
+  collectionOf,
+  type ReviewEntry,
+} from "@/lib/reviews";
+import { formatShort, readingTime } from "@/lib/format";
 
-// Get all posts and categories
-const posts = await getSinglePage("posts");
-const sortedPosts = sortByDate(posts);
-const categories = await getTaxonomy("posts", "categories");
+const [all, bars, drinks, books] = await Promise.all([
+  getAllReviews(),
+  getReviews("bars"),
+  getReviews("drinks"),
+  getReviews("books"),
+]);
 
-// Pagination
-const totalPages = Math.ceil(posts.length / config.settings.pagination);
-const currentPosts = sortedPosts.slice(0, config.settings.pagination);
+const cover = bars[0] ?? all[0];
+const rest = all.filter((e) => e !== cover);
+const lead = rest[0];
+const compact = rest.slice(1, 5);
 
-// Prepare posts data for client-side filtering
-const postsForClient = sortedPosts.map(post => ({
-  id: post.id,
-  data: {
-    title: post.data.title,
-    description: post.data.description,
-    date: post.data.date,
-    image: post.data.image,
-    categories: post.data.categories,
-    authors: post.data.authors,
-    tags: post.data.tags
-  }
-}));
+function info(entry: ReviewEntry) {
+  const d = entry.data;
+  const cat = CATEGORY[collectionOf(entry)];
+  return {
+    href: reviewHref(entry),
+    label: cat.label,
+    tagClass: cat.tagClass,
+    eyebrow: d.eyebrow ? `${cat.label} · ${d.eyebrow}` : cat.label,
+    img: d.hero_image ?? ("cover_image" in d ? d.cover_image : undefined),
+    alt: d.hero_alt ?? d.title,
+    title: d.title,
+    description: d.description,
+    read: readingTime(entry.body ?? ""),
+    date: formatShort(d.date),
+  };
+}
+
+const coverInfo = cover ? info(cover) : null;
+const leadInfo = lead ? info(lead) : null;
+
+const booksData = books[0]?.data;
+const booksImg =
+  booksData && "cover_image" in booksData
+    ? booksData.cover_image
+    : "/images/site/book-cover.svg";
+
+const explore = [
+  {
+    href: "/bars",
+    label: "Bars",
+    tagClass: "tag--bars",
+    title: "Bars & Rooms",
+    blurb: CATEGORY.bars.blurb,
+    cta: "Browse bars",
+    img: bars[0]?.data.hero_image ?? "/images/site/home-feature-2.jpg",
+    wide: true,
+  },
+  {
+    href: "/drinks",
+    label: "Drinks",
+    tagClass: "tag--drinks",
+    title: "Drinks & Spirits",
+    blurb: CATEGORY.drinks.blurb,
+    cta: "Browse drinks",
+    img: drinks[0]?.data.hero_image ?? "/images/site/drink-1.jpg",
+    wide: false,
+  },
+  {
+    href: "/books",
+    label: "Books",
+    tagClass: "tag--books",
+    title: "Books & Pages",
+    blurb: CATEGORY.books.blurb,
+    cta: "Browse books",
+    img: booksImg,
+    wide: false,
+  },
+];
 ---
 
-<Base>
-  <section class="section">
-    <div class="container">
-      <!-- Hero Section -->
-      <div class="text-center mb-12">
-        <h1 class="text-4xl md:text-5xl font-bold text-text-dark mb-4">
-          Prose & Palate
-        </h1>
-        <p class="text-xl text-text mb-6 max-w-3xl mx-auto">
-          A quiet corner for nice bars, fine drinks, and good books.
-        </p>
-      </div>
-
-      <!-- Category Filter -->
-      <div class="category-filter mb-8">
-        <div class="flex flex-wrap gap-2 justify-center md:justify-start">
-          <button
-            class="category-btn active inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-200 bg-primary text-white border-primary shadow-md"
-            data-category="all"
-          >
-            <span class="font-medium">All</span>
-          </button>
-          {categories.map((category) => {
-            return (
-              <button
-                class="category-btn inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-200 bg-body text-text border-border hover:border-primary hover:text-primary hover:shadow-sm dark:bg-body dark:text-text dark:border-border dark:hover:border-primary dark:hover:text-primary"
-                data-category={category}
-              >
-                <span class="font-medium">{humanize(category)}</span>
-              </button>
-            );
-          })}
+<BaseLayout>
+  <main>
+    {
+      coverInfo && (
+        <div class="container">
+          <section class="cover">
+            <div
+              class="cover__img"
+              style={`background-image:url('${coverInfo.img}')`}
+              role="img"
+              aria-label={coverInfo.alt}
+            />
+            <div class="cover__scrim" />
+            <div class="cover__content">
+              <div class="inner">
+                <span class="eyebrow">The Cover Story</span>
+                <h1>
+                  <a href={coverInfo.href} style="color:inherit"
+                    >{coverInfo.title}</a
+                  >
+                </h1>
+                {coverInfo.description && (
+                  <p class="lede">{coverInfo.description}</p>
+                )}
+                <div class="meta">
+                  <strong>{coverInfo.eyebrow}</strong>
+                  <span class="dot" />
+                  <span>{coverInfo.date}</span>
+                  <span class="dot" />
+                  <span>{coverInfo.read}</span>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
-      </div>
+      )
+    }
 
-      <!-- Posts Grid -->
-      <div id="posts-container" data-all-posts>
-        <Posts className="mb-16" posts={currentPosts} />
-        <Pagination totalPages={totalPages} currentPage={1} />
-      </div>
+    {
+      leadInfo && (
+        <div class="container">
+          <h2 class="section-title">Latest Articles</h2>
+          <section class="issue">
+            <article class="issue__lead">
+              <a href={leadInfo.href} class="card__media">
+                <img src={leadInfo.img} alt={leadInfo.alt} />
+                <span class={`tag ${leadInfo.tagClass}`}>{leadInfo.label}</span>
+              </a>
+              <span class="eyebrow">{leadInfo.eyebrow}</span>
+              <h3 class="card__title">{leadInfo.title}</h3>
+              {leadInfo.description && (
+                <p class="card__excerpt">{leadInfo.description}</p>
+              )}
+              <div class="meta">
+                <strong>{leadInfo.label}</strong>
+                <span class="dot" />
+                <span>{leadInfo.read}</span>
+              </div>
+              <p style="margin-top:1rem">
+                <a href={leadInfo.href} class="read-more">
+                  Read the review <span class="arrow">→</span>
+                </a>
+              </p>
+            </article>
 
-      <!-- Empty State (hidden by default) -->
-      <div id="empty-state" class="text-center py-12 hidden">
-        <div class="text-text-light text-6xl mb-4">🔍</div>
-        <h3 class="text-xl font-semibold text-text-dark mb-2">No posts found</h3>
-        <p class="text-text">Try selecting a different category or check back later for new content.</p>
-      </div>
+            <div class="issue__list">
+              {compact.map((entry) => {
+                const c = info(entry);
+                return (
+                  <a href={c.href} class="issue__entry">
+                    <div class="card__media">
+                      <img src={c.img} alt={c.alt} />
+                    </div>
+                    <div class="issue__entry-body">
+                      <span class="eyebrow">{c.eyebrow}</span>
+                      <h4 class="card__title">{c.title}</h4>
+                      {c.description && (
+                        <p class="card__excerpt">{c.description}</p>
+                      )}
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          </section>
+        </div>
+      )
+    }
+
+    <div class="container">
+      <h2 class="section-title">Explore by Subject</h2>
+      <section class="reviews" style="margin-top:0">
+        {
+          explore.map((e) => (
+            <a href={e.href} class={e.wide ? "card card--wide" : "card"}>
+              <div class="card__media">
+                <img src={e.img} alt={e.title} />
+                <span class={`tag ${e.tagClass}`}>{e.label}</span>
+              </div>
+              <h3 class="card__title">{e.title}</h3>
+              <p class="card__excerpt">{e.blurb}</p>
+              <span class="read-more">
+                {e.cta} <span class="arrow">→</span>
+              </span>
+            </a>
+          ))
+        }
+      </section>
     </div>
-  </section>
-</Base>
 
-<script>
-  // Use event delegation to ensure handlers always work
-  document.addEventListener('click', function(e: MouseEvent) {
-    const target = e.target as HTMLElement;
-    if (target && target.closest('.category-btn')) {
-      e.preventDefault();
-      const button = target.closest('.category-btn') as HTMLElement;
-      const selectedCategory = button.getAttribute('data-category');
-      
-      handleCategoryFilter(selectedCategory || 'all');
-    }
-  });
-
-  // Initialize on multiple events to ensure it works when coming back from other pages
-  document.addEventListener('DOMContentLoaded', initializeFromURL);
-  document.addEventListener('visibilitychange', function() {
-    if (!document.hidden) {
-      setTimeout(initializeFromURL, 50);
-    }
-  });
-  window.addEventListener('pageshow', function() {
-    setTimeout(initializeFromURL, 50);
-  });
-  window.addEventListener('focus', function() {
-    setTimeout(initializeFromURL, 50);
-  });
-
-  // Handle browser back/forward
-  window.addEventListener('popstate', function() {
-    setTimeout(initializeFromURL, 50);
-  });
-
-  function handleCategoryFilter(selectedCategory: string) {
-    updateActiveButton(selectedCategory);
-    filterPosts(selectedCategory);
-    
-    // Update URL
-    const newUrl = selectedCategory === 'all' ? '/' : `/?category=${selectedCategory}`;
-    if (window.location.href !== window.location.origin + newUrl) {
-      window.history.pushState({ category: selectedCategory }, '', newUrl);
-    }
-  }
-
-  function initializeFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const category = urlParams.get('category') || 'all';
-    updateActiveButton(category);
-    filterPosts(category);
-  }
-
-  function updateActiveButton(selectedCategory: string) {
-    const categoryButtons = document.querySelectorAll('.category-btn');
-    categoryButtons.forEach(btn => {
-      const htmlBtn = btn as HTMLElement;
-      const btnCategory = htmlBtn.getAttribute('data-category');
-
-      // Reset classes to a common base state before applying active/inactive specifics
-      htmlBtn.classList.remove(
-        'bg-primary', 'text-white', 'border-primary', 'shadow-md', // Active state classes
-        'bg-body', 'text-text', 'border-border', // Base inactive state classes (light/dark aware)
-        'dark:bg-body', 'dark:text-text', 'dark:border-border', // Explicit dark for base (might be redundant if bg-body etc. are fully dynamic)
-        'hover:border-primary', 'hover:text-primary', 'hover:shadow-sm',
-        'dark:hover:border-primary', 'dark:hover:text-primary'
-      );
-
-      if (btnCategory === selectedCategory) {
-        // Active button: Primary background, white text (usually fine for both themes)
-        htmlBtn.classList.add('bg-primary', 'text-white', 'border-primary', 'shadow-md');
-      } else {
-        // Inactive button: Theme-aware body background, text, and border
-        // The dark:* variants in the initial class attribute handle dark mode for inactive buttons.
-        // The js only needs to ensure the base classes are correctly applied for light mode / default inheritance.
-        htmlBtn.classList.add(
-          'bg-body', 'text-text', 'border-border',
-          'hover:border-primary', 'hover:text-primary', 'hover:shadow-sm'
-          // No need to add dark:* here as they are in the static class list or handled by var() in bg-body etc.
-        );
-      }
-    });
-  }
-
-  function filterPosts(selectedCategory: string) {
-    const postsContainer = document.getElementById('posts-container') as HTMLElement | null;
-    const emptyState = document.getElementById('empty-state') as HTMLElement | null;
-    
-    if (!postsContainer) return;
-
-    // Get all post elements and extract their categories
-    const allPostElements = postsContainer.querySelectorAll('.row > div');
-    let visibleCount = 0;
-    
-    allPostElements.forEach(postEl => {
-      const htmlPostEl = postEl as HTMLElement;
-      const categoryLinks = htmlPostEl.querySelectorAll('a[href^="/categories/"]');
-      const categories = Array.from(categoryLinks).map(link => {
-        const href = link.getAttribute('href');
-        return href ? href.replace('/categories/', '').toLowerCase() : '';
-      }).filter(cat => cat);
-      
-      if (selectedCategory === 'all' || categories.includes(selectedCategory.toLowerCase())) {
-        htmlPostEl.style.display = '';
-        visibleCount++;
-      } else {
-        htmlPostEl.style.display = 'none';
-      }
-    });
-
-    // Show/hide empty state
-    if (emptyState) {
-      if (visibleCount === 0) {
-        postsContainer.style.display = 'none';
-        emptyState.classList.remove('hidden');
-      } else {
-        postsContainer.style.display = 'block';
-        emptyState.classList.add('hidden');
-      }
-    }
-  }
-</script>
-
-<style>
-  .category-filter {
-    margin-bottom: 2rem;
-  }
-  
-  @media (max-width: 768px) {
-    .category-filter {
-      margin-bottom: 1.5rem;
-    }
-  }
-</style>
+    <div class="container">
+      <section class="statement">
+        <span class="eyebrow">The Editorial</span>
+        <p>
+          A good bar, a good drink, a good book — each is just a room with the
+          lights turned low, waiting for you to sit down and stay.
+        </p>
+        <div class="sig">— The Editors, Prose &amp; Palate</div>
+      </section>
+    </div>
+  </main>
+</BaseLayout>

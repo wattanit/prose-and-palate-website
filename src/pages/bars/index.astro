@@ -1,0 +1,21 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ReviewCard from "@/components/ReviewCard.astro";
+import { getReviews, CATEGORY } from "@/lib/reviews";
+
+const entries = await getReviews("bars");
+const cat = CATEGORY.bars;
+---
+
+<BaseLayout title={cat.title} description={cat.blurb}>
+  <main class="container">
+    <header class="cat-header">
+      <span class="eyebrow">Reviews</span>
+      <h1>{cat.title}</h1>
+      <p>{cat.blurb}</p>
+    </header>
+    <section class="cat-grid">
+      {entries.map((entry) => <ReviewCard entry={entry} />)}
+    </section>
+  </main>
+</BaseLayout>

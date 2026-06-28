@@ -1,0 +1,20 @@
+---
+/* A clickable body figure with a pure-CSS lightbox (`:target`).
+   `id` must be unique on the page — it wires the thumbnail to its lightbox. */
+interface Props {
+  src: string;
+  alt?: string;
+  caption?: string;
+  id: string;
+}
+const { src, alt = "", caption, id } = Astro.props;
+---
+
+<figure class="figure figure--clickable">
+  <a href={`#${id}`}><img src={src} alt={alt} loading="lazy" /></a>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+<div id={id} class="lightbox">
+  <a href="#" class="lightbox__close" aria-label="Close image">&times;</a>
+  <img src={src} alt={alt} />
+</div>

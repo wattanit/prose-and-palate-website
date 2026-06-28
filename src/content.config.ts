@@ -1,77 +1,92 @@
+import { defineCollection } from "astro:content";
+import { z } from "astro:schema";
 import { glob } from "astro/loaders";
-import { defineCollection, z } from "astro:content";
 
-// About collection schema
-const aboutCollection = defineCollection({
-  loader: glob({ pattern: "**/-*.{md,mdx}", base: "src/content/about" }),
-  schema: z.object({
-    title: z.string(),
-    meta_title: z.string().optional(),
-    image: z.string().optional(),
-    draft: z.boolean().optional(),
-    what_i_do: z.object({
-      title: z.string(),
-      items: z.array(
-        z.object({
-          title: z.string(),
-          description: z.string(),
-        }),
-      ),
-    }),
-  }),
+/* A single rating block (e.g. "The Cocktail", "The Place", "Spirit").
+   Reviews carry a FLEXIBLE array of these — 0, 1, or many. The rating panel
+   adapts its layout to however many blocks a given review provides. */
+const ratingBlock = z.object({
+  label: z.string(),
+  overall: z.number(),
+  summary: z.string().optional(),
+  criteria: z
+    .array(
+      z.object({
+        label: z.string(),
+        score: z.number(),
+        note: z.string().optional(),
+      }),
+    )
+    .default([]),
 });
 
-// Authors collection schema
-const authorsCollection = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "src/content/authors" }),
-  schema: z.object({
-    title: z.string(),
-    meta_title: z.string().optional(),
-    image: z.string().optional(),
-    description: z.string().optional(),
-    social: z
-      .object({
-        facebook: z.string().url().optional(),
-        twitter: z.string().url().optional(),
-        instagram: z.string().url().optional(),
-      })
-      .optional(),
-  }),
+/* A single key/value detail in the info card / spec sheet. Also flexible —
+   each review lists only the fields relevant to its subject. */
+const infoItem = z.object({
+  label: z.string(),
+  value: z.string(),
 });
 
-// Posts collection schema
-const postsCollection = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "src/content/posts" }),
-  schema: z.object({
-    title: z.string(),
-    meta_title: z.string().optional(),
-    description: z.string().optional(),
-    date: z.date().optional(),
-    image: z.string().optional(),
-    categories: z.array(z.string()).default(["others"]),
-    authors: z.array(z.string()).default(["Admin"]),
-    tags: z.array(z.string()).default(["others"]),
-    draft: z.boolean().optional(),
-  }),
-});
-
-// Pages collection schema
-const pagesCollection = defineCollection({
-  schema: z.object({
-    id: z.string().optional(),
-    title: z.string(),
-    meta_title: z.string().optional(),
-    description: z.string().optional(),
-    image: z.string().optional(),
-    layout: z.string().optional(),
-    draft: z.boolean().optional(),
-  }),
-});
-
-// Export collections
-export const collections = {
-  posts: postsCollection,
-  about: aboutCollection,
-  authors: authorsCollection,
-  pages: pagesCollection,
+/* Fields shared by every review type. */
+const reviewBase = {
+  title: z.string(),
+  meta_title: z.string().optional(),
+  description: z.string().optional(), // standfirst / card excerpt
+  date: z.coerce.date(),
+  author: z.string().default("The Editors"),
+  photographer: z.string().optional(),
+  draft: z.boolean().default(false),
+  hero_image: z.string(),
+  hero_alt: z.string().optional(),
+  eyebrow: z.string().optional(), // hero kicker, e.g. "Singapore · Asia's 50 Best"
+  tags: z.array(z.string()).default([]),
+  ratings: z.array(ratingBlock).default([]),
+  info: z.array(infoItem).default([]),
+  info_heading: z.string().optional(), // subject name shown atop the info card
+  // Floating table of contents (desktop). Each entry links to a section id in
+  // the body; "Verdict" is appended automatically when ratings exist.
+  toc: z
+    .array(z.object({ label: z.string(), href: z.string() }))
+    .default([]),
 };
+
+const bars = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./contents/bars" }),
+  schema: z.object({ ...reviewBase, map_embed: z.string().optional() }),
+});
+
+const drinks = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./contents/drinks" }),
+  schema: z.object({ ...reviewBase, map_embed: z.string().optional() }),
+});
+
+const books = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./contents/books" }),
+  schema: z.object({
+    ...reviewBase,
+    hero_image: z.string().optional(), // books fall back to the cover for cards
+    book_author: z.string(),
+    cover_image: z.string(),
+    cover_alt: z.string().optional(),
+    review_title: z.string().optional(), // editorial headline for the review column
+    stars: z.number().optional(), // 0–5, for the star row on the mini rating card
+  }),
+});
+
+const pages = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./contents/pages" }),
+  schema: z.object({
+    title: z.string(),
+    meta_title: z.string().optional(),
+    description: z.string().optional(),
+    eyebrow: z.string().optional(),
+    date: z.coerce.date().optional(),
+    author: z.string().optional(),
+    hero_image: z.string().optional(),
+    hero_alt: z.string().optional(),
+    hero_caption: z.string().optional(),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { bars, drinks, books, pages };

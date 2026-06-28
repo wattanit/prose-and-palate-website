@@ -1,21 +1,21 @@
 ---
-import Base from "@/layouts/Base.astro";
-import { markdownify } from "@/lib/utils/textConverter";
-import type { CollectionEntry } from "astro:content";
-import { getEntry, render } from "astro:content";
-const entry = (await getEntry("pages", "404")) as CollectionEntry<"pages">;
-const { Content } = await render(entry);
+import BaseLayout from "@/layouts/BaseLayout.astro";
 ---
 
-<Base title={entry.data.title}>
-  <section class="section">
-    <div class="container">
-      <div class="flex h-[40vh] items-center justify-center">
-        <div class="text-center">
-          <h1 class="mb-4" set:html={markdownify(entry.data.title)} />
-          <Content />
-        </div>
-      </div>
-    </div>
-  </section>
-</Base>
+<BaseLayout title="Page not found">
+  <main class="container">
+    <article class="std-article">
+      <header class="std-article__head">
+        <span class="eyebrow">404</span>
+        <h1>Lost the thread.</h1>
+        <p class="lede">
+          The page you’re looking for has wandered off — perhaps to a quiet bar
+          somewhere, nursing something brown.
+        </p>
+      </header>
+      <p style="text-align:center; margin-top:1rem">
+        <a href="/" class="btn">Back to the magazine <span class="arrow">→</span></a>
+      </p>
+    </article>
+  </main>
+</BaseLayout>

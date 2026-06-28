@@ -1,0 +1,24 @@
+---
+interface Item {
+  label: string;
+  href: string;
+}
+interface Props {
+  items: Item[];
+  label?: string;
+  includeVerdict?: boolean;
+}
+const { items, label = "In this review", includeVerdict = false } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <aside class="toc vellum" aria-label="Table of contents">
+      <div class="toc__label">{label}</div>
+      {items.map((i) => (
+        <a href={i.href}>{i.label}</a>
+      ))}
+      {includeVerdict && <a href="#verdict">Verdict</a>}
+    </aside>
+  )
+}

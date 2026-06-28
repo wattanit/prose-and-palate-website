@@ -1,0 +1,24 @@
+---
+/* A body section for the digital-spread layout (bars & drinks).
+   - default : asymmetric two-column grid (~42/58)
+   - alt     : the same grid, flipped (~58/42) — alternate sections to break symmetry
+   - prose   : a single full-width reading column (text-only sections)
+   Each paragraph / <Figure> inside becomes its own box flowing into the grid. */
+interface Props {
+  heading?: string;
+  id?: string;
+  variant?: "default" | "alt" | "prose";
+}
+const { heading, id, variant = "default" } = Astro.props;
+const cls =
+  variant === "prose"
+    ? "section--prose"
+    : variant === "alt"
+      ? "section section--alt"
+      : "section";
+---
+
+<section class={cls} id={id}>
+  {heading && <h2>{heading}</h2>}
+  <slot />
+</section>

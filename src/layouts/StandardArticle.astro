@@ -1,0 +1,54 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { formatShort } from "@/lib/format";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  entry: CollectionEntry<"pages">;
+}
+const { entry } = Astro.props;
+const d = entry.data;
+const hasMeta = Boolean(d.author || d.date);
+---
+
+<BaseLayout
+  title={d.meta_title ?? d.title}
+  description={d.description}
+  image={d.hero_image}
+>
+  <main class="container">
+    <article class="std-article">
+      <header class="std-article__head">
+        {d.eyebrow && <span class="eyebrow">{d.eyebrow}</span>}
+        <h1>{d.title}</h1>
+        {d.description && <p class="lede">{d.description}</p>}
+        {
+          hasMeta && (
+            <div class="meta">
+              {d.author && (
+                <span>
+                  By <strong>{d.author}</strong>
+                </span>
+              )}
+              {d.author && d.date && <span class="dot" />}
+              {d.date && <span>Updated {formatShort(d.date)}</span>}
+            </div>
+          )
+        }
+      </header>
+
+      {
+        d.hero_image && (
+          <figure class="std-article__hero">
+            <img src={d.hero_image} alt={d.hero_alt ?? ""} />
+            {d.hero_caption && <figcaption>{d.hero_caption}</figcaption>}
+          </figure>
+        )
+      }
+
+      <div class="std-article__body">
+        <slot />
+      </div>
+    </article>
+  </main>
+</BaseLayout>

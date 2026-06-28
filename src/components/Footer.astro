@@ -1,0 +1,41 @@
+---
+import { site, footerLinks } from "@/lib/siteConfig";
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="brand">Prose <span class="amp">&amp;</span> Palate</div>
+        <p style="max-width:34ch; color:var(--ink-soft)">{site.footerBlurb}</p>
+      </div>
+      <div>
+        <h4>Subjects</h4>
+        <ul>
+          {
+            footerLinks.subjects.map((l) => (
+              <li>
+                <a href={l.href}>{l.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div>
+        <h4>The Magazine</h4>
+        <ul>
+          {
+            footerLinks.magazine.map((l) => (
+              <li>
+                <a href={l.href}>{l.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+    <div class="colophon">
+      <span>{site.copyright}</span>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,33 @@
+---
+import {
+  CATEGORY,
+  reviewHref,
+  collectionOf,
+  type ReviewEntry,
+} from "@/lib/reviews";
+import { formatShort, readingTime } from "@/lib/format";
+
+interface Props {
+  entry: ReviewEntry;
+}
+const { entry } = Astro.props;
+const d = entry.data;
+const cat = CATEGORY[collectionOf(entry)];
+const eyebrow = d.eyebrow ?? cat.label;
+const read = readingTime(entry.body ?? "");
+const img =
+  d.hero_image ?? ("cover_image" in d ? d.cover_image : undefined);
+---
+
+<a href={reviewHref(entry)} class="cat-card">
+  <div class="cat-card__media">
+    <img src={img} alt={d.hero_alt ?? d.title} />
+    <span class={`tag ${cat.tagClass}`}>{cat.label}</span>
+  </div>
+  <span class="eyebrow">{eyebrow}</span>
+  <h3 class="cat-card__title">{d.title}</h3>
+  {d.description && <p class="cat-card__excerpt">{d.description}</p>}
+  <div class="meta">
+    <span>{read}</span><span class="dot"></span><span>{formatShort(d.date)}</span>
+  </div>
+</a>
