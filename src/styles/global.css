@@ -454,7 +454,8 @@ body:has(.theme-toggle:focus-visible) .toggle-pill { outline: 2px solid var(--am
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  /* `scroll` (not `fixed`) so `cover` sizes to this element, not the viewport */
+  background-attachment: scroll;
   filter: saturate(1.04) contrast(1.06);
   z-index: 0;
 }
@@ -751,7 +752,8 @@ body:has(.theme-toggle:focus-visible) .toggle-pill { outline: 2px solid var(--am
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed; /* subtle pure-CSS parallax */
+  /* `scroll` (not `fixed`) so `cover` sizes to this 21:9 band, not the viewport */
+  background-attachment: scroll;
   filter: saturate(1.04) contrast(1.05);
   z-index: -1;
 }
@@ -1331,6 +1333,19 @@ body:has(.theme-toggle:focus-visible) .toggle-pill { outline: 2px solid var(--am
   .nav { gap: 0.95rem; }
   .hero-feature__caption { position: static; margin-top: 1rem; }
   .hero-feature { margin-bottom: 2.5rem; }
+}
+
+/* Hero parallax: the image is grown taller than its frame (.is-parallax, added
+   by JS) so it has room to drift; the translateY is set on scroll by the script
+   in BaseLayout. Replaces `background-attachment: fixed`, which over-zoomed by
+   sizing `cover` to the viewport. A little is cropped top/bottom — keep the
+   subject centred. No JS / reduced motion / mobile → static full image. */
+.spread__hero-img.is-parallax,
+.cover__img.is-parallax {
+  top: -9%;
+  bottom: auto;
+  height: 118%;
+  will-change: transform;
 }
 
 /* Reduced motion */

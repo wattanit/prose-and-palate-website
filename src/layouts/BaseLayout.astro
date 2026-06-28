@@ -85,5 +85,60 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
       document.addEventListener("astro:after-swap", apply);
       apply();
     </script>
+
+    <script>
+      // Subtle hero parallax. Drifts the hero image as its frame scrolls past,
+      // without `background-attachment: fixed` (which over-zoomed). Desktop only,
+      // skipped under reduced-motion. Scroll/resize listeners are bound once;
+      // the layers are re-queried on each (re-)init so it survives view transitions.
+      const SHIFT = 7; // max drift, % of the (enlarged) image height
+      const enable = () =>
+        matchMedia("(min-width: 60rem)").matches &&
+        !matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      let bound = false;
+      let ticking = false;
+
+      function layers() {
+        return document.querySelectorAll(".spread__hero-img, .cover__img");
+      }
+
+      function update() {
+        ticking = false;
+        const vh = window.innerHeight || 1;
+        layers().forEach((el) => {
+          const frame = el.parentElement;
+          if (!frame) return;
+          const r = frame.getBoundingClientRect();
+          const p = (r.top + r.height / 2 - vh / 2) / vh; // ~ -1..1
+          const shift = Math.max(-SHIFT, Math.min(SHIFT, p * -SHIFT * 2));
+          el.style.transform = `translateY(${shift.toFixed(2)}%)`;
+        });
+      }
+
+      function onScroll() {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      }
+
+      function init() {
+        const on = enable();
+        layers().forEach((el) => {
+          el.classList.toggle("is-parallax", on);
+          if (!on) el.style.transform = "";
+        });
+        if (!on) return;
+        update();
+        if (!bound) {
+          bound = true;
+          window.addEventListener("scroll", onScroll, { passive: true });
+          window.addEventListener("resize", onScroll, { passive: true });
+        }
+      }
+
+      document.addEventListener("astro:page-load", init);
+    </script>
   </body>
 </html>
