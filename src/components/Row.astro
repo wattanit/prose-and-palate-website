@@ -1,0 +1,16 @@
+---
+/* Places its blocks side by side in an asymmetric 2-column layout inside a
+   <Section>. Put two blocks inside (e.g. a paragraph and a <Figure>, or two
+   figures). Collapses to a single stacked column on mobile.
+   - default : ~42/58 (narrow | wide)
+   - alt     : ~58/42 (wide | narrow) */
+interface Props {
+  variant?: "default" | "alt";
+}
+const { variant = "default" } = Astro.props;
+const cls = variant === "alt" ? "row row--alt" : "row";
+---
+
+<div class={cls}>
+  <slot />
+</div>

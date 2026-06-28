@@ -9,6 +9,23 @@ interface Props {
   mapEmbed?: string;
 }
 const { info, heading, mapEmbed } = Astro.props;
+
+/* `mapEmbed` may be the bare Google Maps `src` URL or the whole <iframe> embed
+   snippet. Pull out the URL and decode the HTML entities Google's "Copy HTML"
+   leaves in it (e.g. an apostrophe in a place name becomes `&#39;`, which
+   otherwise corrupts the `pb` parameter and makes Maps reject the request). */
+function mapSrc(raw: string): string {
+  const match = raw.match(/src=["']([^"']+)["']/i);
+  let url = (match ? match[1] : raw).trim();
+  url = url
+    .replace(/&amp;/g, "&")
+    .replace(/&#0*39;/g, "'")
+    .replace(/&apos;/g, "'")
+    .replace(/&#0*34;/g, '"')
+    .replace(/&quot;/g, '"');
+  return url;
+}
+const mapUrl = mapEmbed ? mapSrc(mapEmbed) : undefined;
 ---
 
 {
@@ -29,9 +46,9 @@ const { info, heading, mapEmbed } = Astro.props;
         </dl>
       </div>
       <div class="info-card__map">
-        {mapEmbed ? (
+        {mapUrl ? (
           <iframe
-            src={mapEmbed}
+            src={mapUrl}
             title={`Map of ${heading ?? "the location"}`}
             loading="lazy"
             allowfullscreen

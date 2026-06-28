@@ -29,7 +29,10 @@ hero_alt: "…"
 eyebrow: "Singapore · World's 50 Best"   # hero kicker
 tags: ["singapore", "cocktails"]         # rendered as #hashtags
 info_heading: "Jigger & Pony"
-map_embed: "https://www.google.com/maps/embed?pb=…"  # optional iframe src
+map_embed: "https://www.google.com/maps/embed?pb=…"  # optional; the map's src URL
+# (you may also paste the whole <iframe> embed snippet — the URL is extracted and
+#  HTML entities like &#39; are decoded. If pasting the full snippet, use a YAML
+#  block scalar `map_embed: |` because it contains double quotes.)
 toc:                                     # floating TOC (desktop); "Verdict" auto-added
   - { label: "The Room", href: "#sec-1" }
 ratings:                                 # FLEXIBLE: 0, 1, or many blocks (all /10)
@@ -49,6 +52,7 @@ Body is MDX. Import the building blocks and structure the body with them:
 
 ```mdx
 import Section from "@/components/Section.astro";
+import Row from "@/components/Row.astro";
 import Figure from "@/components/Figure.astro";
 import PullQuote from "@/components/PullQuote.astro";
 
@@ -56,20 +60,33 @@ import PullQuote from "@/components/PullQuote.astro";
 
 <Section heading="The Room" id="sec-1">
 
+A full-width paragraph. By default every block in a section stacks in one
+column, in source order. Blank lines between every block; no indentation.
+
+<Row>
+
 <Figure id="lb-1" src="/images/…" alt="…" caption="…" />
 
-Paragraph text. Blank lines between every block; no indentation.
+A paragraph that sits beside the figure, in the asymmetric 2-column layout.
+
+</Row>
+
+Another full-width paragraph below the row.
 
 </Section>
 
 <PullQuote cite="On the service">A striking line…</PullQuote>
 
-<Section heading="The People" id="sec-2" variant="alt"> … </Section>
+<Section heading="The People" id="sec-2" variant="prose"> … </Section>
 ```
 
-`<Section variant>`: omit for the default 42/58 grid, `"alt"` to flip it, or
-`"prose"` for a single full-width text column (sections with no images). Each
-`<Figure id>` must be unique on the page (it wires the `:target` lightbox).
+**Layout control:**
+- A `<Section>` is a single full-width column by default — blocks stack top to
+  bottom. Use `variant="prose"` to narrow it to a comfortable reading measure.
+- Wrap **two** blocks (a paragraph + a `<Figure>`, or two figures) in a `<Row>`
+  to place them side by side: `<Row>` is ~42/58, `<Row variant="alt">` is ~58/42.
+  Rows collapse to a single stacked column on mobile.
+- Each `<Figure id>` must be unique on the page (it wires the `:target` lightbox).
 
 ## Book reviews
 
