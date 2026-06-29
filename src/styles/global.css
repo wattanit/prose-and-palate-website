@@ -531,12 +531,15 @@ body:has(.theme-toggle:focus-visible) .toggle-pill { outline: 2px solid var(--am
 }
 .issue__entry {
   display: grid;
-  grid-template-columns: 5.5rem 1fr;
+  /* minmax(0, …) lets the text column shrink below its content's min width,
+     so long titles/excerpts wrap instead of overflowing the viewport. */
+  grid-template-columns: 5.5rem minmax(0, 1fr);
   gap: 1.1rem;
   padding: clamp(1.2rem, 2.5vw, 1.7rem) 0;
   border-bottom: 1px solid var(--rule);
   align-items: start;
 }
+.issue__entry-body { min-width: 0; }
 .issue__entry:first-child { padding-top: 0; }
 .issue__entry:last-child { border-bottom: 0; }
 .issue__entry .card__media {
